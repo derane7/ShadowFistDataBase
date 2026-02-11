@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Card Details</title>
+    <style>
+        body {
+            background-color: lightblue;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+
+        table {
+            margin: auto;
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid #ccc;
+            background-color: lightcyan;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .info-box {
+            border: 1px solid #ccc;
+            background-color: lightcyan;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 15px auto;
+            width: 80%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="cardName" style="text-align:center;">Loading...</h1>
+
+    <table>
+        <tr>
+            <th>HP</th>
+            <th>ID</th>
+            <th>Subtype</th>
+            <th>Release Date</th>
+            <th>Artist</th>
+            <th>Set Number</th>
+            <th>Level</th>
+        </tr>
+        <tr>
+            <td id="hp"></td>
+            <td id="id"></td>
+            <td id="subtypes"></td>
+            <td id="release_date"></td>
+            <td id="artist"></td>
+            <td id="set_num"></td>
+            <td id="level"></td>
+        </tr>
+
+        <tr>
+            <th>Type</th>
+            <th>Generation</th>
+            <th>Evolves To</th>
+            <th>Supertype</th>
+            <th>Retreat Cost</th>
+            <th>Rarity</th>
+            <th>Set</th>
+        </tr>
+        <tr>
+            <td id="types"></td>
+            <td id="generation"></td>
+            <td id="evolvesTo"></td>
+            <td id="supertype"></td>
+            <td id="convertedRetreatCost"></td>
+            <td id="rarity"></td>
+            <td id="set"></td>
+        </tr>
+
+        <tr>
+            <th>Series</th>
+            <th>Publisher</th>
+            <th>Evolves From</th>
+            <th>Weaknesses</th>
+            <th>Pokedex Number</th>
+            <th>Legalities</th>
+            <th>Resistances</th>
+        </tr>
+        <tr>
+            <td id="series"></td>
+            <td id="publisher"></td>
+            <td id="evolvesFrom"></td>
+            <td id="weaknesses"></td>
+            <td id="nationalPokedexNumbers"></td>
+            <td id="legalities"></td>
+            <td id="resistances"></td>
+        </tr>
+
+        <tr>
+            <th>Regulation Mark</th>
+            <th>Ancient Trait</th>
+        </tr>
+        <tr>
+            <td id="regulationMark"></td>
+            <td id="ancientTrait"></td>
+        </tr>
+    </table>
+
+    <h2 class="section-title">Attacks</h2>
+    <div id="attacks" class="info-box"></div>
+
+    <h2 class="section-title">Flavor Text</h2>
+    <div id="flavorText" class="info-box"></div>
+
+    <h2 class="section-title">Rules</h2>
+    <div id="rules" class="info-box"></div>
+
+    <h2 class="section-title">Abilities</h2>
+    <div id="abilities" class="info-box"></div>
+
+
+    <script>
+        async function loadCard() {
+            const params = new URLSearchParams(window.location.search);
+            const cardID = params.get("id");
+
+            if (!cardID) {
+                document.body.innerHTML = "<h1>No card ID provided.</h1>";
+                return;
+            }
+
+            // Fetch card using backend
+            const response = await fetch("http://localhost:5000/search", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: cardID })
+            });
+
+            const result = await response.json();
+            const card = result.results[0];
+
+            if (!card) {
+                document.body.innerHTML = "<h1>Card not found.</h1>";
+                return;
+            }
+
+            // Fill the page
+            document.getElementById("cardName").textContent = card.name ?? "";
+
+            const fields = [
+                "hp","id","subtypes","release_date","artist","set_num","level",
+                "types","generation","evolvesTo","supertype","convertedRetreatCost",
+                "rarity","set","series","publisher","evolvesFrom","weaknesses",
+                "nationalPokedexNumbers","legalities","resistances",
+                "regulationMark","ancientTrait"
+            ];
+
+            fields.forEach(f => {
+                const elem = document.getElementById(f);
+                if (elem) elem.textContent = card[f] ?? "";
+            });
+
+            document.getElementById("attacks").textContent = card.attacks ?? "";
+            document.getElementById("flavorText").textContent = card.flavorText ?? "";
+            document.getElementById("rules").textContent = card.rules ?? "";
+            document.getElementById("abilities").textContent = card.abilities ?? "";
+        }
+
+        loadCard();
+    </script>
+</body>
+
+</html>
