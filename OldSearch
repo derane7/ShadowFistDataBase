@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pokemon TCG Search</title>
+        <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>
+        <img src="Pokémon_Trading_Card_Game_logo.png" alt="Pokemon TCG Logo">
+    </h1>
+
+    <p>Select the search filters below to look up specific cards.</p>
+
+    <section class="filter-container">
+        <div class="filter-row">
+            <label for="supertypes" style="font-weight: bold;">Card type:</label>
+            <select name="supertypes" id="supertypes">
+                <option value="default">--Select Option---</option>
+                <option value="energy">Energy</option>
+                <option value="pokémon">Pokémon</option>
+                <option value="trainer">Trainer</option>
+            </select>
+            
+            <label for="subtype" style="font-weight: bold;">Subtypes:</label>
+            <select name="subtype" id="subtype" multiple>
+                <option value="ACE SPEC">ACE SPEC</option>
+                <option value="Ancient">Ancient</option>
+                <option value="Baby">Baby</option>
+                <option value="Basic">Basic</option>
+                <option value="BREAK">BREAK</option>
+                <option value="EX">EX</option>
+                <option value="Eternamax">Eternamax</option>
+                <option value="Fusion Strike">Fusion Strike</option>
+                <option value="Future">Future</option>
+                <option value="GX">GX</option>
+                <option value="Item">Item</option>
+                <option value="LEGEND">LEGEND</option>
+                <option value="Level-Up">Level-Up</option>
+                <option value="MEGA">MEGA</option>
+                <option value="Pokémon Tool">Pokémon Tool</option>
+                <option value="Pokémon Tool F">Pokémon Tool F</option>
+                <option value="Prime">Prime</option>
+                <option value="Prism Star">Prism Star</option>
+                <option value="Radiant">Radiant</option>
+                <option value="Rapid Strike">Rapid Strike</option>
+                <option value="Restored">Restored</option>
+                <option value="SP">SP</option>
+                <option value="Single Strike">Single Strike</option>
+                <option value="Special">Special</option>
+                <option value="Stadium">Stadium</option>
+                <option value="Stage 1">Stage 1</option>
+                <option value="Stage 2">Stage 2</option>
+                <option value="Supporter">Supporter</option>
+                <option value="TAG TEAM">TAG TEAM</option>
+                <option value="Team Plasma">Team Plasma</option>
+                <option value="Technical Machine">Technical Machine</option>
+                <option value="Tera">Tera</option>
+                <option value="Ultra Beast">Ultra Beast</option>
+                <option value="V">V</option>
+                <option value="V-UNION">V-UNION</option>
+                <option value="VMAX">VMAX</option>
+                <option value="VSTAR">VSTAR</option>
+                <option value="ex">ex</option>
+            </select>
+        </div>
+        
+        <div class="filter-row">
+            <label for="set" style="font-weight: bold;">Set:</label>
+            <input type="text" id="set" name="set">
+            
+            <label for="generation" style="font-weight: bold;">Generation:</label>
+            <select id="generation" name="generation">
+                <option value="default">--Select Option---</option>
+                <option value="First">1</option>
+                <option value="Second">2</option>
+                <option value="Third">3</option>
+                <option value="Fourth">4</option>
+                <option value="Fifth">5</option>
+                <option value="Sixth">6</option>
+                <option value="Seventh">7</option>
+                <option value="Eighth">8</option>
+                <option value="Ninth">9</option>
+            </select>
+        </div>
+
+        <div class="filter-row">
+            <label for="evolvesFrom" style="font-weight: bold;">Evolves From:</label>
+            <input type="text" id="evolvesFrom" name="evolvesFrom">
+
+            <label for="evolvesTo" style="font-weight: bold;">Evolves To:</label>
+            <input type="text" id="evolvesTo" name="evolvesTo">
+        </div>
+
+        <div class="filter-row">
+            <label for="type" style="font-weight: bold;">Types:</label>
+            <select id="type" name="type" multiple>
+                <option value="Fire">Fire</option>
+                <option value="Water">Water</option>
+                <option value="Grass">Grass</option>
+                <option value="Lightning">Lightning</option>
+                <option value="Psychic">Psychic</option>
+                <option value="Darkness">Darkness</option>
+                <option value="Fighting">Fighting</option>
+                <option value="Metal">Metal</option>
+                <option value="Dragon">Dragon</option>
+                <option value="Colorless">Colorless</option>
+                <option value="Fairy">Fairy</option>
+            </select>
+
+            <label for="rarity" style="font-weight: bold;">Rarity:</label>
+            <select id="rarity" name="rarity">
+                <option value="default">--Select Option---</option>
+                <option value="Rare Holo">Rare Holo</option>
+                <option value="Rare">Rare</option>
+                <option value="Uncommon">Uncommon</option>
+                <option value="Common">Common</option>
+                <option value="Promo">Promo</option>
+                <option value="Rare Secret">Rare Secret</option>
+                <option value="Rare Shining">Rare Shining</option>
+                <option value="Rare Holo EX">Rare Holo EX</option>
+                <option value="Rare Holo Star">Rare Holo Star</option>
+                <option value="Rare Holo LV.X">Rare Holo LV.X</option>
+                <option value="Rare Prime">Rare Prime</option>
+                <option value="LEGEND">LEGEND</option>
+                <option value="Rare Ultra">Rare Ultra</option>
+                <option value="Rare ACE">Rare ACE</option>
+                <option value="Rare BREAK">Rare BREAK</option>
+                <option value="Rare Holo GX">Rare Holo GX</option>
+                <option value="Rare Rainbow">Rare Rainbow</option>
+                <option value="Rare Prism Star">Rare Prism Star</option>
+                <option value="Rare Shiny">Rare Shiny</option>
+                <option value="Rare Shiny GX">Rare Shiny GX</option>
+                <option value="Rare Holo V">Rare Holo V</option>
+                <option value="Rare Holo VSTAR">Rare Holo VSTAR</option>
+                <option value="Rare Holo VMAX">Rare Holo VMAX</option>
+                <option value="Amazing Rare">Amazing Rare</option>
+                <option value="Classic Collection">Classic Collection</option>
+                <option value="Trainer Gallery Rare Holo">Trainer Gallery Rare Holo</option>
+                <option value="Radiant Rare">Radiant Rare</option>
+                <option value="Double Rare">Double Rare</option>
+                <option value="Illustration Rare">Illustration Rare</option>
+                <option value="Ultra Rare">Ultra Rare</option>
+                <option value="Special Illustration Rare">Special Illustration Rare</option>
+                <option value="Hyper Rare">Hyper Rare</option>
+            </select>
+        </div>
+
+        <div class="filter-row">
+            <label for="name" style="font-weight: bold;">Name:</label>
+            <input type="text" id="name" name="name">
+
+            <button type="button" onclick="toggleAccordion()" class="accordion">More Options...</button>
+            <script>
+            function toggleAccordion() {
+                const accordionButton = document.querySelector(".accordion");
+                const panel = accordionButton.closest(".filter-row").nextElementSibling;
+
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                    accordionButton.textContent = "More Options...";
+                } else {
+                    panel.style.display = "block";
+                    accordionButton.textContent = "Hide Options";
+                }
+            }
+            </script>
+        </div>
+
+    <div class="panel">
+        <div class="filter-row">
+            <label for="level" style="font-weight: bold;">Level:</label>
+            <input type="number" id="level" name="level">
+
+            <label for="hp" style="font-weight: bold;">HP:</label>
+            <input type="number" id="hp" name="hp">
+        </div>
+
+        <div class="filter-row">
+            <label for="publisher" style="font-weight: bold;">Publisher:</label>
+            <select id="publisher" name="publisher">
+                <option value="default">--Select Option---</option>
+                <option value="WOTC">WOTC</option>
+                <option value="TPCI">TCPI</option>
+            </select>
+            <label for="series" style="font-weight: bold;">Series:</label>
+            <input type="text" id="series" name="series">
+        </div>
+
+        <div class="filter-row">
+            <label for="abilities" style="font-weight: bold;">Ability:</label>
+            <input type="text" id="abilities" name="abilities">
+
+            <label for="attacks" style="font-weight: bold;">Attacks:</label>
+            <input type="text" id="attacks" name="attacks">
+        </div>
+
+        <div class="filter-row">
+
+            <label for="release_date" style="font-weight: bold;">Release Date:</label>
+            <input type="date" id="release_date" name="release_date">
+
+            <label for="rules" style="font-weight: bold;">Rules Text:</label>
+            <input type="text" id="rules" name="rules">
+
+        </div>
+
+        <div class="filter-row">
+            <label for="resistances" style="font-weight: bold;">Resistances:</label>
+            <select id="resistances" name="resistances" multiple>
+                <option value="Fire">Fire</option>
+                <option value="Water">Water</option>
+                <option value="Grass">Grass</option>
+                <option value="Lightning">Lightning</option>
+                <option value="Psychic">Psychic</option>
+                <option value="Darkness">Darkness</option>
+                <option value="Fighting">Fighting</option>
+                <option value="Metal">Metal</option>
+                <option value="Dragon">Dragon</option>
+                <option value="Colorless">Colorless</option>
+                <option value="Fairy">Fairy</option>
+            </select>
+            <label for="weaknesses" style="font-weight: bold;">Weakness:</label>
+            <select id="weaknesses" name="weaknesses" multiple>
+                <option value="Fire">Fire</option>
+                <option value="Water">Water</option>
+                <option value="Grass">Grass</option>
+                <option value="Lightning">Lightning</option>
+                <option value="Psychic">Psychic</option>
+                <option value="Darkness">Darkness</option>
+                <option value="Fighting">Fighting</option>
+                <option value="Metal">Metal</option>
+                <option value="Dragon">Dragon</option>
+                <option value="Colorless">Colorless</option>
+                <option value="Fairy">Fairy</option>
+            </select>
+        </div>
+
+        <div class="filter-row">
+            
+            <label for="artist" style="font-weight: bold;">Artist:</label>
+            <input type="text" id="artist" name="artist">
+
+            <label for="convertedRetreatCost" style="font-weight: bold;">Converted Retreat Cost:</label>
+            <input type="number" id="convertedRetreatCost" name="convertedRetreatCost">
+
+        </div>
+
+        <div class="filter-row">
+            <label for="flavorText" style="font-weight: bold;">Flavor Text:</label>
+            <input type="text" id="flavorText" name="flavorText">
+            
+            <label for="nationalPokedexNumbers" style="font-weight: bold;">Pokédex Number:</label>
+                <input type="number" id="nationalPokedexNumbers" name="nationalPokedexNumbers">
+        </div>
+        
+        <div class="filter-row">
+            <label for="legality" style="font-weight: bold;">Legality:</label>
+            <select id="legality" name="legality" multiple>
+                <option value="standard">Standard</option>
+                <option value="expanded">Expanded</option>
+                <option value="unlimited">Unlimited</option>
+            </select>
+            
+            <label for="regulationMark" style="font-weight: bold;">Regulation Mark:</label>
+            <select id="regulationMark" name="regulationMark">
+                <option value="default">--Select Option---</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+            </select>
+        </div>
+
+        <div class="filter-row">
+            <label for="ancientTrait" style="font-weight: bold;">Ancient Trait:</label>
+            <select id="ancientTrait" name="ancientTrait" multiple>
+                <option value="Barrage">Barrage</option>
+                <option value="Barrier">Barrier</option>
+                <option value="Double">Double</option>
+                <option value="Evolution">Evolution</option>
+                <option value="Growth">Growth</option>
+                <option value="Max">Max</option>
+                <option value="Plus">Plus</option>
+                <option value="Recovery">Recovery</option>
+                <option value="Stop">Stop</option>
+                <option value="Wild">Wild</option>
+            </select>
+        </div>
+
+        <div class="filter-row">
+            <label for="id" style="font-weight: bold;">Pokémon Card ID:</label>
+                <input type="text" id="id" name="id">
+            <label for="set_num" style="font-weight: bold;">Set Number:</label>
+                <input type="number" id="set_num" name="set_num">
+        </div>
+    </div>
+        <div class="filter-row">
+            <label for="keywordSearch" style="font-weight: bold;">Keywords:</label>
+            <input type="text" placeholder="Search..." id="keywordSearch">
+
+            <button type="button" onclick="submitFilters()" id="submitButton">Submit</button>
+       
+        </div>
+    </section>
+    <section id="results-container" class="filter-container" style="display: none;">
+        <h2>Search Results</h2>
+        <ul id="results-list"></ul>
+    </section>
+</body>
+<script>
+                async function submitFilters() {
+                    const resultsContainer = document.getElementById("results-container");
+                    const resultsList = document.getElementById("results-list");
+
+                    // Show results section
+                    resultsContainer.style.display = "block";
+                    resultsList.innerHTML = "Loading...";
+
+                    // Collect all filter values (ALL your dropdowns + inputs)
+                    const rawFilters = {
+                        supertypes: document.getElementById("supertypes").value,
+                        subtype: Array.from(document.getElementById("subtype").selectedOptions).map(o => o.value),
+                        set: document.getElementById("set").value,
+                        generation: document.getElementById("generation").value,
+                        evolvesFrom: document.getElementById("evolvesFrom").value,
+                        evolvesTo: document.getElementById("evolvesTo").value,
+                        type: Array.from(document.getElementById("type").selectedOptions).map(o => o.value),
+                        rarity: document.getElementById("rarity").value,
+                        name: document.getElementById("name").value,
+                        level: document.getElementById("level").value,
+                        hp: document.getElementById("hp").value,
+                        publisher: document.getElementById("publisher").value,
+                        series: document.getElementById("series").value,
+                        abilities: document.getElementById("abilities").value,
+                        attacks: document.getElementById("attacks").value,
+                        release_date: document.getElementById("release_date").value,
+                        rules: document.getElementById("rules").value,
+                        resistances: Array.from(document.getElementById("resistances").selectedOptions).map(o => o.value),
+                        weaknesses: Array.from(document.getElementById("weaknesses").selectedOptions).map(o => o.value),
+                        artist: document.getElementById("artist").value,
+                        convertedRetreatCost: document.getElementById("convertedRetreatCost").value,
+                        flavorText: document.getElementById("flavorText").value,
+                        nationalPokedexNumbers: document.getElementById("nationalPokedexNumbers").value,
+                        legality: Array.from(document.getElementById("legality").selectedOptions).map(o => o.value),
+                        regulationMark: document.getElementById("regulationMark").value,
+                        ancientTrait: Array.from(document.getElementById("ancientTrait").selectedOptions).map(o => o.value),
+                        id: document.getElementById("id").value,
+                        set_num: document.getElementById("set_num").value,
+                        keywordSearch: document.getElementById("keywordSearch").value
+                        };
+
+                        // Convert any array fields into space-joined strings (backend expects strings)
+                        function normalizeValue(v) {
+                            if (Array.isArray(v)) return v.join(" ");
+                            if (v === null || v === undefined) return "";
+                            return String(v);
+                            }
+                            const normalized = {};
+                            for (const k in rawFilters) normalized[k] = normalizeValue(rawFilters[k]);
+
+                            // Build payload that includes BOTH:
+                            //  - all original (normalized) frontend fields (so you can keep UI behavior), and
+                            //  - the exact keys your current backend expects (aliases) so filters work.
+                            const filters = Object.assign({}, normalized, {
+                            // Backend-friendly aliases (exact keys BackEnd.py currently checks)
+                            name: normalized.name || "",                       // matches CSV "Name"
+                            type: normalized.type || "",                       // matches CSV "Types"
+                            hp: normalized.hp || "",                           // matches CSV "HP"
+                            rarity: normalized.rarity || "",                   // matches CSV "Rarity"
+                            artist: normalized.artist || "",                   // matches CSV "Artist"
+                            subtype: normalized.subtype || "",                 // matches CSV "Subtypes"
+                            supertype: normalized.supertypes || normalized.supertype || "",
+                            setnumber: normalized.set_num || normalized.set || "",  // backend expects "setnumber" -> "Number"
+                            evolvesTo: normalized.evolvesTo || normalized.evolves_to || "",
+                            releasedate: normalized.release_date || normalized.released || "",
+                            generation: normalized.generation || ""
+                        });
+
+                        console.log("SENDING FILTERS:", filters);
+
+                    try {
+                        const res = await fetch("http://127.0.0.1:5000/search", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                             body: JSON.stringify(filters)
+                        }); 
+
+                        const data = await res.json();
+                        const cards = data.results || [];
+
+                        resultsList.innerHTML = ""; // clear loading text
+
+                        if (cards.length === 0) {
+                            resultsList.innerHTML = "<li>No results found.</li>";
+                            return;
+                        }
+
+                         // Build result list items
+                        cards.forEach(card => {
+                        const li = document.createElement("li");
+
+                        li.innerHTML = `
+                            <div class="card-result">
+                                <strong>Name:</strong> ${card.name ?? "N/A"}<br>
+                                <strong>ID:</strong> ${card.id ?? "N/A"}<br>
+                                <strong>Release Date:</strong> ${card.release_date ?? "N/A"}<br>
+                                <strong>Artist:</strong> ${card.artist ?? "N/A"}<br>
+                                <strong>Level:</strong> ${card.level ?? "N/A"}<br>
+                                <strong>HP:</strong> ${card.hp ?? "N/A"}<br>
+                                <strong>Generation:</strong> ${card.generation ?? "N/A"}<br>
+                                <strong>Supertype:</strong> ${card.supertype ?? "N/A"}<br>
+                                <strong>Rarity:</strong> ${card.rarity ?? "N/A"}<br><br>
+
+                                <button onclick="goToCard('${card.id}')">View Card</button>
+                                <button onclick="">Add To Decklist</button>
+                                
+                            </div>
+                        `;
+
+                            resultsList.appendChild(li);
+                        });
+
+                    } catch (err) {
+                        console.error("Search error:", err);
+                        resultsList.innerHTML = "<li>Error fetching results.</li>";
+                    }   
+                 }
+
+            // Redirect to personal result page
+            function goToCard(id) {
+                window.location.href = `ResultTesting.html?id=${encodeURIComponent(id)}`;
+            }
+            </script>
+
+</html>
