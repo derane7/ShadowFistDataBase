@@ -1,0 +1,109 @@
+body {
+    background-color: lightblue;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size:15px;
+}
+
+h1 {
+    display: flex;
+    justify-content: center;
+}
+h2 {
+    display: flex;
+    justify-content: center;
+}
+li {
+    display: block;
+    margin: 10px auto;
+    width: fit-content;
+}
+ul {
+    text-align: center;
+}
+p {
+    text-align: center;
+}
+
+.filter-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background-color: lightcyan;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 0px;
+}
+
+.accordion {
+    cursor: pointer;
+    margin: 10px auto;
+}
+
+.panel {
+    display: none;
+    overflow: hidden;
+}
+
+div input[type=text] {
+    border: 1px solid #ccc;
+    display: block;
+    max-width: 300px;
+    width: 100%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size:15px;
+    margin: 10px auto;
+}
+
+div input[type=number] {
+    border: 1px solid #ccc;
+    display: block;
+    max-width: 300px;
+    width: 100%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size:15px;
+    margin: 10px auto;
+}
+
+div input[type=date] {
+    border: 1px solid #ccc;
+    display: block;
+    max-width: 300px;
+    width: 100%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size:15px;
+    margin: 10px auto;
+}
+
+div button {
+    border: 1px solid #ccc;
+    display: block;
+    max-width: 300px;
+    width: 100%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size:15px;
+    margin: 10px auto;
+}
+
+div {
+    text-align:center;
+}
+
+div select {
+  border: 1px solid #ccc;
+  display: block;
+  max-width: 300px;
+  width: 100%;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 15px;
+  margin: 10px auto;
+}
