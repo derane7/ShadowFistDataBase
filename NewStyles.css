@@ -21,11 +21,3 @@ body {
   margin-bottom: 10px;
   gap: 0px;
 }
-.filter-row3{
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  gap: 0px;
-}
