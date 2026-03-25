@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    
 
+ <div class="filter-row">
+
+   <label for="subtype" style="font-weight: bold;">Subtypes:</label>
+            <select name="subtype" id="subtype" multiple>
+                                
+
+                            <option value="Feng Shui Sites">Feng Shui Sites</option>
+                            <option value="Unaligned Characters">Unaligned Characters</option>
+                            <option value="Unaligned Sites">Unaligned Sites</option>
+                            <option value="Unaligned Sates">Unaligned Sates</option>
+                            <option value="Unaligned Edges">Unaligned Edges</option>
+                            <option value="Chi Sites">Chi Sites</option>
+                            <option value="Chi Events">Chi Events</option>
+                            <option value="Chi States">Chi States</option>
+                            <option value="High-Tech Sites">High-Tech Sites</option>
+                            <option value="High-Tech Events">High-Tech Events</option>
+                            <option value="High-Tech States">High-Tech States</option>
+                            <option value="High-Tech Edges">High-Tech Edges</option>
+                            <option value="High-Tech Edges">High-Tech Edges</option>
+                            <option value="Magic Sites">Magic Sites</option>
+                            <option value="Magic Events">Magic Events</option>
+                            <option value="Magic States">Magic States</option>
+                            <option value="Magic Edges">Magic Edges</option>
+                            <option value="Dragon Characters">Dragon Characters</option>
+                            <option value="Guiding Hand Characters">Guiding Hand Characters</option>
+                            <option value="Guiding Hand Sites">Guiding Hand Sites</option>
+                            <option value="Guiding Hand Events">Guiding Hand Events</option>
+                            <option value="Guiding Hand States">Guiding Hand States</option>
+                            <option value="Guiding Hand Edges">Guiding Hand Edges</option>
+                            <option value="Eaters of the Lotus Characters">Eaters of the Lotus Characters</option>
+                            <option value="Eaters of the Lotus Sites">Eaters of the Lotus Sites</option>
+                            <option value="Eaters of the Lotus Events">Eaters of the Lotus Events</option>
+                            <option value="Eaters of the Lotus States">Eaters of the Lotus States</option>
+                            <option value="Eaters of the Lotus Edges">Eaters of the Lotus Edges</option>
+                            <option value="Ascended Characters">Ascended Characters</option>
+                            <option value="Ascended Sites">Ascended Sites</option>
+                            <option value="Ascended Events">Ascended Events</option>
+                            <option value="Ascended States">Ascended States</option>
+                            <option value="Ascended Edges">Ascended Edges</option>
+                            <option value="Architects of the Flesh Characters">Architects of the Flesh Characters</option>
+                            <option value="Architects of the Flesh Sites">Architects of the Flesh Sites</option>
+                            <option value="Architects of the Flesh Events">Architects of the Flesh Events</option>
+                            <option value="Architects of the Flesh States">Architects of the Flesh States</option>
+                            <option value="Architects of the Flesh Edges">Architects of the Flesh Edges</option>
+                            <option value="Four Monarchs Characters">Four Monarchs Characters</option>
+                            <option value="Four Monarchs Events">Four Monarchs Events</option>
+                            <option value="Four Monarchs States">Four Monarchs States</option>
+                            <option value="Four Monarchs Edges">Four Monarchs Edges</option>
+                            <option value="Jammer Characters">Jammer Characters</option>
+                            <option value="Jammer Sites">Jammer Sites</option>
+                            <option value="Jammer Events">Jammer Events</option>
+                            <option value="Jammer States">Jammer States</option>
+                            <option value="Jammer Edges">Jammer Edges</option>
+
+
+
+            </select>
+        </div>
+
+
+
+
+
+
+            <label for="set" style="font-weight1: bold;">Cost:</label>
+            <input type="text" id="set" name="set">
+
+             <div class="filter-row">
+            <label for="set" style="font-weight2: bold;">Fight:</label>
+            <input type="text" id="set" name="set">
+
+             <div class="filter-row">
+            <label for="set" style="font-weight3: bold;">Res:</label>
+            <input type="text" id="set" name="set">
+            
+
+
+</body>
+</html>
