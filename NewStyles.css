@@ -5,19 +5,12 @@ body {
 }
 
 
-.filter-row1 {
+.filter-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+   
   margin-bottom: 10px;
-  gap: 0px;
-}
-.filter-row2 {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
+   align-items: center;
   gap: 0px;
 }
