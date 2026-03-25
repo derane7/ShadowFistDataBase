@@ -9,7 +9,7 @@
 <body>
     
 
- <div class="filter-row1">
+ <div class="filter-row">
 
    <label for="subtype" style="font-weight: bold;">Subtypes:</label>
             <select name="subtype" id="subtype" multiple>
@@ -71,7 +71,7 @@
 
 
 
-<div class="filter-row2">
+<div class="filter-row">
 
             <label for="set1" style="font-weight: bold;">Cost:</label>
             <input type="text" id="set1" name="set1">
@@ -85,7 +85,13 @@
             <input type="text" id="set3" name="set3">
             
                </div>
+    <div class="filter-row">
+            <label for="keywordSearch" style="font-weight: bold;">Keywords:</label>
+            <input type="text" placeholder="Search..." id="keywordSearch">
 
+            <button type="button" onclick="submitFilters()" id="submitButton">Submit</button>
+       
+        </div>
 
 </body>
 
@@ -99,6 +105,25 @@
                            set2: document.getElementById("set2").value,
                             set3: document.getElementById("set3").value,
                     };
+              
+              
+                  function normalizeValue(v) {
+                            if (Array.isArray(v)) return v.join(" ");
+                            if (v === null || v === undefined) return "";
+                            return String(v);
+                            }
+                            const normalized = {};
+                            for (const k in rawFilters) normalized[k] = normalizeValue(rawFilters[k]);
+
+                           const filters = Object.assign({}, normalized, {
+                           
+                            subtype: normalized.subtype || "",                
+                        });
+
+                        console.log("SENDING FILTERS:", filters);
+              
+              
+              
                 }
 
                        
