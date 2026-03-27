@@ -4,7 +4,7 @@ body {
     font-size:15px;
 }
 
-
+ 
 .filter-row {
   display: flex;
   flex-wrap: wrap;
@@ -13,4 +13,20 @@ body {
   margin-bottom: 10px;
    align-items: center;
   gap: 0px;
+}
+
+
+#submitButton {margin-left: 50px;
+  background: none;
+  border: none;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 10px 15px;
+  transition: background 0.2s;
+}
+
+#submitButton:hover {
+  background-color: #fdffff;
+  border-radius: 6px;
 }
