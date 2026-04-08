@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="NewStyles.css">
 </head>
 <body>
-    <h1>Shadowfist card</h1>
+    <h1 style="margin-bottom: 100px; ">Shadowfist card</h1>
 
  <div class="filter-row">
 
-   <label for="subtype" style="font-weight: bold;  margin-left: 300px;">Subtypes:</label>
+   <label for="subtype" style="font-weight: bold;  margin-left: 300px; font-size: 26px;">Subtypes:</label>
             <select name="subtype" id="subtype" multiple>
                                 
 
@@ -70,26 +70,26 @@
 
 
 
-<p style="font-family: Verdana, sans-serif;  margin-left: 300px;">If does these powers do not appley, please leave blank</p>
+<p style="font-family: Verdana, sans-serif;  margin-left: 300px; color: rgb(224, 99, 99); ">If does these powers do not appley, please leave blank</p>
 <div class="filter-row">
            
             <label for="set1" style="font-weight: bold;">Cost:</label>
-            <input type="text" id="set1" name="set1">
+            <input type="text" id="set1" placeholder="Cost..." name="set1">
 
              
             <label for="set2" style="font-weight: bold;">Fight:</label>
-            <input type="text" id="set2" name="set2">
+            <input type="text" id="set2" placeholder="Fight..." name="set2">
 
            <label for="set3" style="font-weight: bold;">Bod:</label>
-            <input type="text" id="set3" name="set3">
+            <input type="text" id="set3" placeholder="Bod..." name="set3">
 
 
             <label for="set4" style="font-weight: bold;">Res:</label>
-            <input type="text" id="set4" name="set4">
+            <input type="text" id="set4" placeholder="Res..."name="set4">
             
                </div>
     <div class="filter-row">
-            <label for="keywordSearch" style="font-weight: bold;">Keywords:</label>
+            <label for="keywordSearch" style="font-weight: bold; ">Keywords:</label>
             <input type="text" placeholder="Search..." id="keywordSearch">
   
             <button type="button" onclick="submitFilters()" id="submitButton">Submit</button>
