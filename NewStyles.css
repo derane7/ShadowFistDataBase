@@ -1,7 +1,18 @@
 body {
     background-color: lightblue;
+    
+    background-image: url("tenor (1).gif");
+
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size:15px;
+     color: darkcyan;
+     text-shadow:
+        -1px -1px 0 black,  
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black; 
+    margin-left: 100px;
+    
 }
 
  
@@ -13,14 +24,19 @@ body {
   margin-bottom: 10px;
    align-items: center;
   gap: 0px;
+   
 }
 
 
 #submitButton {margin-left: 50px;
   background: none;
   border: none;
-  color: black;
-  font-size: 16px;
+   color: darkcyan; text-shadow:
+        -1px -1px 0 black,  
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black; 
+  font-size: 20px;
   cursor: pointer;
   padding: 10px 15px;
   transition: background 0.2s;
