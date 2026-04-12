@@ -1,12 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shadowfist card</title>
     <link rel="stylesheet" href="NewStyles.css">
 </head>
+
 <body>
+    <!-- Navigation Bar -->
+    <header class="top-nav">
+        <div class="nav-title">Shadowfist Database</div>
+        <div class="nav-actions">
+            <button class="nav-login-btn" onclick="location.href='Login.html'">
+                Login
+            </button>
+        </div>
+    </header>
+
     <main class="details-page">
         <section class="card-header-box">
             <div class="card-image-panel">
@@ -15,11 +27,11 @@
 
             <div class="card-info-panel">
                 <h1 class="card-name">Card Name here</h1>
-                <p class="card-subtiltes">
+                <div class="card-subtiltes">
                     <span class="card-type">Card Type</span>
                     <span class="card-subtype">Card Subtype</span>
                     <span class="card-faction">Card Faction</span>
-                </p>
+                </div>
                 <p class="card-flavor-text">Flavor text</p>
             </div>
 
@@ -52,7 +64,7 @@
 
         <section class="info-section">
             <h2>Keywords / Traits</h2>
-            <div class=""info-box" id=""cardKeywords>
+            <div class="info-box" id="cardKeywords">
                 <p>Keyword 1</p>
                 <p>Keyword 2</p>
                 <p>Keyword 3</p>
@@ -67,3 +79,4 @@
         </section>
     </main>
 </body>
+</html>

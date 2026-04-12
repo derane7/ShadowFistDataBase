@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Shadowfist Account</title>
+    <link rel="stylesheet" href="NewStyles.css">
+</head>
+<body class="page-shell">
+    <main class="page-frame auth-page">
+        <section class="panel-box">
+            <div class="panel-header">
+                <h3 class="eyebrow">Shadowfist Database</h3>
+                <h1>Create Account</h1>
+                <p class="panel-subtext">Create a new account to save decks and manage your collection.</p>
+            </div>
+
+            <form class="stack-form">
+                <div class="field-group">
+                    <label for="createUsername">Username</label>
+                    <input type="text" id="createUsername" name="createUsername" placeholder="Choose a username">
+                </div>
+
+                <div class="field-group">
+                    <label for="createPassword">Password</label>
+                    <input type="password" id="createPassword" name="createPassword" placeholder="Create a password">
+                </div>
+
+                <div class="field-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password">
+                </div>
+
+                <div class="status-banner error-banner">
+                    Account creation confirmations or validation errors can appear here later.
+                </div>
+
+                <div class="button-row centered-row">
+                    <button type="submit" class="primary-action">Create Account</button>
+                    <button type="button" class="secondary-action" onclick="location.href='Login.html'">Back to Login</button>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

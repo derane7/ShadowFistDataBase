@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Shadowfist Account</title>
+    <link rel="stylesheet" href="NewStyles.css">
+</head>
+<body class="page-shell">
+    <main class="page-frame account-page">
+        <section class="panel-box">
+            <div class="panel-header">
+                <p class="eyebrow">Shadowfist Database</p>
+                <h1>My Account</h1>
+                <p class="panel-subtext">View your saved decks, create a new one, or manage existing lists.</p>
+            </div>
+
+            <section class="account-summary">
+                <div class="summary-card">
+                    <h2>Profile</h2>
+                    <p><strong>Username:</strong> SampleUser</p>
+                    <p><strong>Decks Saved:</strong> #</p>
+                    <p><strong>Last Updated:</strong> (insert time since last update in days)</p>
+                </div>
+
+                <div class="summary-card">
+                    <h2>Quick Actions</h2>
+                    <div class="button-column">
+                        <button type="button" class="primary-action">Create New Deck</button>
+                        <button type="button" class="secondary-action">Load Selected Deck</button>
+                        <button type="button" class="danger-action">Delete Selected Deck</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="deck-library">
+                <h2>Your Decks</h2>
+                <div class="deck-list">
+                    <article class="deck-card selected">
+                        <h3>Example Deck 1</h3>
+                        <p>Cards: #</p>
+                        <p>Faction Focus: Example</p>
+                    </article>
+
+                    <article class="deck-card">
+                        <h3>Example Deck 2</h3>
+                        <p>Cards: #</p>
+                        <p>Faction Focus: Example</p>
+                    </article>
+
+                    <article class="deck-card">
+                        <h3>Example Deck 3</h3>
+                        <p>Cards: #</p>
+                        <p>Faction Focus: Example</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="deck-preview">
+                <h2>Selected Deck Preview</h2>
+                <div class="info-box">
+                    <p><strong>Deck Name:</strong> Example Deck 1</p>
+                    <p><strong>Description:</strong> Placeholder description will be listed here later.</p>
+                    <p><strong>Cards:</strong> Placeholder deck contents will be listed here later.</p>
+                </div>
+            </section>
+
+            <div class="button-row spaced-row">
+                <button type="button" class="secondary-action" onclick="location.href='NewSearch.html'">Go to Search</button>
+                <button type="button" class="secondary-action" onclick="location.href='Login.html'">Log Out</button>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
