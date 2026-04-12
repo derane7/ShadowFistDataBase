@@ -46,3 +46,100 @@ body {
   background-color: #fdffff;
   border-radius: 6px;
 }
+
+/* New styles for the Results page */
+.details-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.card-header-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: flex-start;
+  background: rgba(240, 255, 255, 0.88);
+  border: 2px solid #b7e4ea;
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+
+.card-image-panel img {
+  width: 280px;
+  max-width: 100%;
+  border-radius: 12px;
+  border: 2px solid #b7e4ea;
+  display: block;
+}
+
+.card-main-info {
+  flex: 1;
+  min-width: 280px;
+}
+
+.card-main-info h1 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 2.2rem;
+}
+
+.card-subtitle {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stat-box {
+  background: rgba(224, 255, 255, 0.9);
+  border: 2px solid #b7e4ea;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+}
+
+.stat-box h3 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+}
+
+.stat-box p {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  background: rgba(224, 255, 255, 0.85);
+  border: 2px solid #b7e4ea;
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.info-section {
+  margin-bottom: 24px;
+}
+
+.info-section h2 {
+  margin-bottom: 10px;
+}
+
+.info-box {
+  background: rgba(240, 255, 255, 0.88);
+  border: 2px solid #b7e4ea;
+  border-radius: 14px;
+  padding: 18px;
+  line-height: 1.6;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.14);
+}
