@@ -56,7 +56,11 @@ def search_cards():
         # ------------------------
         if subtype:
             results = results[
-                results["subtype"].astype(str).str.contains(subtype, case=False, na=False)
+                results["subtype"]
+                .astype(str)
+                .str.strip()
+                .str.lower()
+                .str.contains(subtype.strip().lower(), na=False)
             ]
 
         # ------------------------
