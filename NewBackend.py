@@ -35,8 +35,6 @@ def search_cards():
     try:
         data = request.get_json() or {}
         print("REQUEST RECEIVED:", data)
-        print("🔥 RAW DATA:", request.get_json())
-        print("🔥 DF COLUMNS:", df.columns.tolist())
 
         results = df.copy()
 
