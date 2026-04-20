@@ -73,19 +73,19 @@
 <p style="font-family: Verdana, sans-serif;  margin-left: 300px; color: rgb(231, 110, 110); ">If does these powers do not appley, please leave blank</p>
 <div class="filter-row">
            
-            <label for="set1" style="font-weight: bold;">Cost:</label>
-            <input type="text" id="set1" placeholder="Cost..." name="set1">
+            <label for="Cost" style="font-weight: bold;">Cost:</label>
+            <input type="text" id="Cost" placeholder="Cost..." name="set1">
 
              
-            <label for="set2" style="font-weight: bold;">Fight:</label>
-            <input type="text" id="set2" placeholder="Fight..." name="set2">
+            <label for="Pow" style="font-weight: bold;">Fight:</label>
+            <input type="text" id="Pow" placeholder="Fight..." name="set2">
 
-           <label for="set3" style="font-weight: bold;">Bod:</label>
-            <input type="text" id="set3" placeholder="Bod..." name="set3">
+           <label for="Bod" style="font-weight: bold;">Bod:</label>
+            <input type="text" id="Bod" placeholder="Bod..." name="set3">
 
 
-            <label for="set4" style="font-weight: bold;">Res:</label>
-            <input type="text" id="set4" placeholder="Res..."name="set4">
+            <label for="Res" style="font-weight: bold;">Res:</label>
+            <input type="text" id="Res" placeholder="Res..."name="set4">
             
                </div>
     <div class="filter-row">
@@ -111,11 +111,12 @@
                     resultsList.innerHTML = "Loading...";
                     // Collect all filter values (ALL your dropdowns + inputs)
                     const rawFilters = {
-                         subtype: Array.from(document.getElementById("subtype").selectedOptions).map(o => o.value),
-                          set1: document.getElementById("set1").value,
-                           set2: document.getElementById("set2").value,
-                            set3: document.getElementById("set3").value,
-                             set4: document.getElementById("set4").value,
+                        subtype: document.getElementById("subtype").value,
+                        Cost: document.getElementById("Cost").value,
+                        Pow: document.getElementById("Pow").value,
+                        Bod: document.getElementById("Bod").value,
+                        Res: document.getElementById("Res").value,
+                        keywordSearch: document.getElementById("keywordSearch").value   // ADD THIS
                     };
               function normalizeValue(v) {
                             if (Array.isArray(v)) return v.join(" ");
@@ -131,10 +132,10 @@
                             const filters = Object.assign({}, normalized, {
                             // Backend-friendly aliases (exact keys BackEnd.py currently checks)
                                                
-                            set1: normalized.set1 || "",                        
-                            set2: normalized.set2 || "",                         
-                            set3: normalized.set3 || "",                    
-                            set4: normalized.set4 || "",                    
+                            Cost: normalized.Cost || "",                        
+                            Pow: normalized.Pow || "",                         
+                            Bod: normalized.Bod || "",                    
+                            Res: normalized.Res || "",                    
                             subtype: normalized.subtype || "",                 // matches CSV "Subtypes"
                            
                         });
@@ -142,7 +143,7 @@
                         console.log("SENDING FILTERS:", filters);
 
                     try {
-                        const res = await fetch("", {
+                        const res = await fetch("http://127.0.0.1:5000/search", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                              body: JSON.stringify(filters)
@@ -164,11 +165,11 @@
 
                         li.innerHTML = `
                             <div class="card-result">
-                                <strong>set1:</strong> ${card.set1 ?? "N/A"}<br>
-                                <strong>set2:</strong> ${card.set2 ?? "N/A"}<br>
-                                <strong>set3:</strong> ${card.set3 ?? "N/A"}<br>
-                                <strong>set4:</strong> ${card.set4 ?? "N/A"}<br>
-                                <strong>Supertype:</strong> ${card.supertype ?? "N/A"}<br>
+                                <strong>Cost:</strong> ${card.Cost ?? "N/A"}<br>
+                                <strong>Pow:</strong> ${card.Pow ?? "N/A"}<br>
+                                <strong>Bod:</strong> ${card.Bod ?? "N/A"}<br>
+                                <strong>Res:</strong> ${card.Res ?? "N/A"}<br>
+                                <strong>Subtype:</strong> ${card.subtype ?? "N/A"}<br>
                                 <br><br>
 
                                 <button onclick="goToCard('${card.id}')">View Card</button>
