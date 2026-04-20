@@ -37,6 +37,7 @@ def search_cards():
         print("REQUEST RECEIVED:", data)
         print("🔥 RAW DATA:", request.get_json())
         print("🔥 DF COLUMNS:", df.columns.tolist())
+        
 
         results = df.copy()
 
@@ -45,9 +46,14 @@ def search_cards():
         # ------------------------
         subtype = str(data.get("subtype", "")).strip()
         keyword = str(data.get("keywordSearch", "")).strip()
+        
+        print("SUBTYPE INPUT:", repr(subtype))
+        print("SAMPLE DF VALUES:", df["subtype"].head(10).tolist()) 
+        print("FILTER CHECK:", subtype)
+        print(df["subtype"].unique()[:10])
 
         cost = str(data.get("Cost", "")).strip()
-        pow_ = str(data.get("Pow", "")).strip()
+        pow= str(data.get("Pow", "")).strip()
         bod = str(data.get("Bod", "")).strip()
         res = str(data.get("Res", "")).strip()
 
@@ -56,8 +62,12 @@ def search_cards():
         # ------------------------
         if subtype:
             results = results[
-                results["subtype"].astype(str).str.contains(subtype, case=False, na=False)
+                results["subtype"]
+                .str.casefold()
+                .str.contains(subtype.casefold(), na=False)
             ]
+
+        print(results["subtype"].value_counts().head(20))
 
         # ------------------------
         # COST FILTER
@@ -70,9 +80,9 @@ def search_cards():
         # ------------------------
         # POW FILTER
         # ------------------------
-        if pow_:
+        if pow:
             results = results[
-                results["Pow"].astype(str).str.strip().str.contains(pow_, na=False)
+                results["Pow"].astype(str).str.strip().str.contains(pow, na=False)
             ]
 
         # ------------------------
