@@ -74,9 +74,9 @@ def search_cards():
         # ------------------------
         # POW FILTER
         # ------------------------
-        if pow_:
+        if pow:
             results = results[
-                results["Pow"].astype(str).str.strip().str.contains(pow_, na=False)
+                results["Pow"].astype(str).str.strip().str.contains(pow, na=False)
             ]
 
         # ------------------------
