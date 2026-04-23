@@ -77,6 +77,48 @@
                 <p>Extra card/game notes or rulings</p>
             </div>
         </section>
+        <script>
+            function loadCard() {
+
+                // 🔥 DEBUG: check if data exists
+                const stored = sessionStorage.getItem("selectedCard");
+                console.log("SESSION RAW:", stored);
+
+                if (!stored) {
+                    console.error("No card found in sessionStorage");
+                    return;
+                }
+
+                const card = JSON.parse(stored);
+                console.log("PARSED CARD:", card);
+
+                // 🃏 Main info
+                document.querySelector(".card-name").textContent = card.Title || "Unknown";
+
+                document.querySelector(".card-subtype").textContent = card.subtype || "-";
+
+                // Stats
+                document.getElementById("cardCost").textContent = card.Cost || "-";
+                document.getElementById("cardPower").textContent = card.Pow || "-";
+                document.getElementById("cardBod").textContent = card.Bod || "-";
+                document.getElementById("cardRes").textContent = card.Res || "-";
+
+                // Meta (optional — will stay "-" if missing)
+                document.getElementById("cardID").textContent = card.id || "-";
+                document.getElementById("cardRarity").textContent = card.Rarity || "-";
+                document.getElementById("cardSet").textContent = card.Expansion || "-";
+                document.getElementById("cardUnique").textContent = card.Unique || "-";
+
+                // Flavor (if exists)
+                const flavor = document.querySelector(".card-flavor-text");
+                if (flavor) {
+                    flavor.textContent = card.Flav || "";
+                }
+            }
+
+            loadCard();
+            </script>
     </main>
 </body>
 </html>
+
