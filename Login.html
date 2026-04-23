@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadowfist Login</title>
+    <link rel="stylesheet" href="NewStyles.css">
+</head>
+<body class="page-shell">
+    <main class="page-frame auth-page">
+        <section class="panel-box">
+            <div class="panel-header">
+                <h3 class="eyebrow">Shadowfist Database</h3>
+                <h1>Login</h1>
+                <p class="panel-subtext">Enter your account information to access decks, saved cards, and search tools.</p>
+            </div>
+
+            <form class="stack-form">
+                <div class="field-group">
+                    <label for="loginUsername">Username</label>
+                    <input type="text" id="loginUsername" name="loginUsername" placeholder="Enter username">
+                </div>
+
+                <div class="field-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter password">
+                </div>
+
+                <div class="status-banner error-banner">
+                    Authentication messages and error codes can appear here later.
+                </div>
+
+                <div class="button-row centered-row">
+                    <button type="submit" class="primary-action">Log In</button>
+                    <button type="button" class="secondary-action" onclick="location.href='CreateAccount.html'">Create Account</button>
+                </div>
+            </form>
+
+            <div class="panel-footer-links">
+                <a href="NewSearch.html">Continue as Guest</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

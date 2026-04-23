@@ -1,4 +1,4 @@
-body {
+Body {
     background-color: lightblue;
     
     background-image: url("tenor (1).gif");
@@ -10,11 +10,11 @@ body {
         -1px -1px 0 black,  
          1px -1px 0 black,
         -1px  1px 0 black,
-         1px  1px 0 black; 
-    margin-left: 100px;
+         1px  1px 0 black;
+    margin-left: 50px;
+    margin-right: 50px;
     
 }
-
  
 .filter-row {
   display: flex;
@@ -26,7 +26,6 @@ body {
   gap: 0px;
    
 }
-
 
 #submitButton {margin-left: 50px;
   background: none;
@@ -47,11 +46,55 @@ body {
   border-radius: 6px;
 }
 
+/* Navigation bar styles */
+.top-nav {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  background-color: lightcyan;
+  border-bottom: 2px solid darkcyan;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  text-shadow: none;
+}
+
+.nav-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: darkcyan;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+}
+
+.nav-login-btn {
+  padding: 8px 16px;
+  border: 1px solid darkcyan;
+  background-color: lightblue;
+  color: darkcyan;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.nav-login-btn:hover {
+  background-color: darkcyan;
+  color: lightcyan;
+}
+
 /* New styles for the Results page */
 .details-page {
   max-width: 1200px;
   margin: 0 auto;
   padding: 30px;
+  color: darkcyan;
+  text-shadow: none;
 }
 
 .card-header-box {
@@ -59,8 +102,8 @@ body {
   flex-wrap: wrap;
   gap: 30px;
   align-items: flex-start;
-  background: rgba(240, 255, 255, 0.88);
-  border: 2px solid #b7e4ea;
+  background: lightcyan;
+  border: 2px solid darkcyan;
   border-radius: 16px;
   padding: 25px;
   margin-bottom: 30px;
@@ -71,7 +114,7 @@ body {
   width: 280px;
   max-width: 100%;
   border-radius: 12px;
-  border: 2px solid #b7e4ea;
+  border: 2px solid darkcyan;
   display: block;
 }
 
@@ -99,8 +142,8 @@ body {
 }
 
 .stat-box {
-  background: rgba(224, 255, 255, 0.9);
-  border: 2px solid #b7e4ea;
+  background: lightblue;
+  border: 2px solid darkcyan;
   border-radius: 12px;
   padding: 12px;
   text-align: center;
@@ -121,8 +164,8 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 10px;
-  background: rgba(224, 255, 255, 0.85);
-  border: 2px solid #b7e4ea;
+  background: lightblue;
+  border: 2px solid darkcyan;
   border-radius: 12px;
   padding: 15px;
 }
@@ -136,10 +179,243 @@ body {
 }
 
 .info-box {
-  background: rgba(240, 255, 255, 0.88);
-  border: 2px solid #b7e4ea;
+  background: lightblue;
+  border: 2px solid darkcyan;
   border-radius: 14px;
   padding: 18px;
   line-height: 1.6;
   box-shadow: 0 4px 14px rgba(0,0,0,0.14);
+}
+
+/* Styles for Account based pages */
+.page-shell {
+  margin: 0;
+  min-height: 100vh;
+  background-color: lightblue;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: darkcyan;
+  text-shadow: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.page-frame {
+  width: 100%;
+  max-width: 1100px;
+}
+
+.panel-box {
+  background-color: lightcyan;
+  border: 2px solid darkcyan;
+  border-radius: 18px;
+  padding: 36px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.10);
+  position: relative;
+}
+
+.panel-box::before,
+.panel-box::after {
+  content: "";
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border-color: darkcyan;
+  pointer-events: none;
+}
+
+.panel-box::before {
+  top: 14px;
+  left: 14px;
+  border-top: 3px solid darkcyan;
+  border-left: 3px solid darkcyan;
+}
+
+.panel-box::after {
+  right: 14px;
+  bottom: 14px;
+  border-right: 3px solid darkcyan;
+  border-bottom: 3px solid darkcyan;
+}
+
+.panel-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 8px 0;
+  font-size: .95rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: darkcyan;
+}
+
+.panel-header h1 {
+  margin: 0 0 12px 0;
+  font-size: 2.1rem;
+  color: darkcyan;
+}
+
+.panel-subtext {
+  margin: 0 auto;
+  max-width: 650px;
+  line-height: 1.6;
+  color: darkcyan;
+}
+
+.stack-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-group label {
+  font-weight: bold;
+  color: darkcyan;
+}
+
+.field-group input {
+  padding: 12px 14px;
+  font-size: 1rem;
+  border: 1px solid darkcyan;
+  border-radius: 10px;
+  background-color: lightcyan;
+  color: darkcyan;
+}
+
+.status-banner {
+  border: 1px solid darkcyan;
+  border-radius: 12px;
+  padding: 14px;
+  background-color: lightcyan;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.error-banner {
+  border: 1px solid darkred;
+  background-color: pink;
+  color: darkred;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.centered-row {
+  justify-content: center;
+}
+
+.spaced-row {
+  justify-content: space-between;
+}
+
+.button-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.primary-action,
+.secondary-action,
+.danger-action {
+  min-width: 180px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 1px solid darkcyan;
+  background-color: lightcyan;
+  color: darkcyan;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.primary-action:hover,
+.secondary-action:hover {
+  transform: translateY(-1px);
+  background-color: darkcyan;
+  color: lightcyan;
+}
+
+.danger-action {
+  border-color: darkred;
+  color: darkred;
+}
+
+.danger-action:hover {
+  background-color: darkred;
+  color: pink;
+}
+
+.panel-footer-links {
+  text-align: center;
+  margin-top: 22px;
+}
+
+.panel-footer-links a {
+  color: darkcyan;
+  text-decoration: none;
+  border-bottom: 1px solid darkcyan;
+}
+
+.panel-footer-links a:hover {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: darkcyan;
+  border-bottom: 1px solid darkcyan;
+}
+
+.account-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.summary-card,
+.deck-card,
+.info-box {
+  border: 1px solid darkcyan;
+  border-radius: 14px;
+  background-color: lightcyan;
+  padding: 18px;
+}
+
+.summary-card h2,
+.deck-library h2,
+.deck-preview h2 {
+  margin-top: 0;
+}
+
+.deck-library {
+  margin-bottom: 28px;
+}
+
+.deck-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.deck-card {
+  cursor: pointer;
+}
+
+.deck-card.selected {
+  outline: 2px solid darkcyan;
+  outline-offset: 2px;
+  background-color: lightcyan;
 }
