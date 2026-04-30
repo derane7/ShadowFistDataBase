@@ -26,12 +26,10 @@
                     <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter password">
                 </div>
 
-                <div class="status-banner error-banner">
-                    Authentication messages and error codes can appear here later.
-                </div>
+                <div id="authMessageBox" class="error-box" style="display: none;"></div>
 
                 <div class="button-row centered-row">
-                    <button type="submit" class="primary-action">Log In</button>
+                    <button type="button" class="primary-action" onclick="loginUser()">Log In</button>
                     <button type="button" class="secondary-action" onclick="location.href='CreateAccount.html'">Create Account</button>
                 </div>
             </form>
@@ -41,5 +39,42 @@
             </div>
         </section>
     </main>
+
+<script>
+function showLoginMessage(message) {
+    const box = document.getElementById("authMessageBox");
+    box.style.display = "block";
+    box.textContent = message;
+}
+
+function clearLoginMessage() {
+    const box = document.getElementById("authMessageBox");
+    box.style.display = "none";
+    box.textContent = "";
+}
+
+async function loginUser() {
+    clearLoginMessage();
+
+    const username = document.getElementById("loginUsername").value;
+    const password = document.getElementById("loginPassword").value;
+
+    const response = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    });
+
+    const data = await response.json();
+
+    if (data.status === "success") {
+        sessionStorage.setItem("username", data.username);
+        window.location.href = "NewSearch.html";
+    } else {
+        showLoginMessage(data.message);
+    }
+}
+</script>
+
 </body>
 </html>

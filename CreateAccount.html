@@ -31,16 +31,56 @@
                     <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password">
                 </div>
 
-                <div class="status-banner error-banner">
-                    Account creation confirmations or validation errors can appear here later.
-                </div>
+                <div id="createMessageBox" class="status-banner error-banner" style="display: none;"></div>
 
                 <div class="button-row centered-row">
-                    <button type="submit" class="primary-action">Create Account</button>
+                    <button type="button" class="primary-action" onclick="createAccount()">Create Account</button>
                     <button type="button" class="secondary-action" onclick="location.href='Login.html'">Back to Login</button>
                 </div>
             </form>
         </section>
     </main>
+
+<script>
+function showCreateMessage(message) {
+    const box = document.getElementById("createMessageBox");
+    box.style.display = "block";
+    box.textContent = message;
+}
+
+function clearCreateMessage() {
+    const box = document.getElementById("createMessageBox");
+    box.style.display = "none";
+    box.textContent = "";
+}
+
+async function createAccount() {
+    clearCreateMessage();
+
+    const username = document.getElementById("createUsername").value;
+    const password = document.getElementById("createPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (password !== confirmPassword) {
+        showCreateMessage("Passwords do not match.");
+        return;
+    }
+
+    const response = await fetch("/create-account", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    });
+
+    const data = await response.json();
+
+    if (data.status === "success") {
+        window.location.href = "Login.html";
+    } else {
+        showCreateMessage(data.message);
+    }
+}
+</script>
+
 </body>
 </html>

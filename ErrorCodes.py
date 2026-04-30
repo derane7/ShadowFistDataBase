@@ -42,3 +42,10 @@ ERROR_CODES = {
 
 def get_error_message(error_code):
     return ERROR_CODES.get(error_code, "Unknown error occurred.")
+
+def build_error_response(error_code):
+    return {
+        "status": "error",
+        "errorCode": error_code,
+        "message": get_error_message(error_code)
+    }

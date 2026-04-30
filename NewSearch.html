@@ -12,7 +12,7 @@
     <header class="top-nav">
         <div class="nav-title">Shadowfist Database</div>
         <div class="nav-actions">
-            <button class="nav-login-btn" onclick="location.href='Login.html'">
+            <button class="nav-login-btn" id="navAccountButton" onclick="handleNavAccount()">
                 Login
             </button>
         </div>
@@ -110,107 +110,130 @@
         <h2>Search Results</h2>
         <ul id="results-list"></ul>
     </section>
-</body>
 
 <script>
-                async function submitFilters() {
-               const resultsContainer = document.getElementById("results-container");
-                    const resultsList = document.getElementById("results-list");
+    async function submitFilters() {
+    const resultsContainer = document.getElementById("results-container");
+        const resultsList = document.getElementById("results-list");
 
-                    // Show results section
-                    resultsContainer.style.display = "block";
-                    resultsList.innerHTML = "Loading...";
-                    // Collect all filter values (ALL your dropdowns + inputs)
-                    const rawFilters = {
-                        subtype: Array.from(document.getElementById("subtype").selectedOptions).map(o => o.value),
-                        Cost: document.getElementById("Cost").value,
-                        Pow: document.getElementById("Pow").value,
-                        Bod: document.getElementById("Bod").value,
-                        Res: document.getElementById("Res").value,
-                        keywordSearch: document.getElementById("keywordSearch").value   // ADD THIS
-                    };
-              function normalizeValue(v) {
-                            if (Array.isArray(v)) return v.join(" ");
-                            if (v === null || v === undefined) return "";
-                            return String(v);
-                            }
-                            const normalized = {};
-                            for (const k in rawFilters) normalized[k] = normalizeValue(rawFilters[k]);
+        // Show results section
+        resultsContainer.style.display = "block";
+        resultsList.innerHTML = "Loading...";
+        // Collect all filter values (ALL your dropdowns + inputs)
+        const rawFilters = {
+            subtype: Array.from(document.getElementById("subtype").selectedOptions).map(o => o.value),
+            Cost: document.getElementById("Cost").value,
+            Pow: document.getElementById("Pow").value,
+            Bod: document.getElementById("Bod").value,
+            Res: document.getElementById("Res").value,
+            keywordSearch: document.getElementById("keywordSearch").value   // ADD THIS
+        };
+    function normalizeValue(v) {
+                if (Array.isArray(v)) return v.join(" ");
+                if (v === null || v === undefined) return "";
+                return String(v);
+                }
+                const normalized = {};
+                for (const k in rawFilters) normalized[k] = normalizeValue(rawFilters[k]);
 
-                            // Build payload that includes BOTH:
-                            //  - all original (normalized) frontend fields (so you can keep UI behavior), and
-                            //  - the exact keys your current backend expects (aliases) so filters work.
-                            const filters = Object.assign({}, normalized, {
-                            // Backend-friendly aliases (exact keys BackEnd.py currently checks)
-                                               
-                            Cost: normalized.Cost || "",                        
-                            Pow: normalized.Pow || "",                         
-                            Bod: normalized.Bod || "",                    
-                            Res: normalized.Res || "",                    
-                            subtype: normalized.subtype || "",                 // matches CSV "Subtypes"
-                           
-                        });
+                // Build payload that includes BOTH:
+                //  - all original (normalized) frontend fields (so you can keep UI behavior), and
+                //  - the exact keys your current backend expects (aliases) so filters work.
+                const filters = Object.assign({}, normalized, {
+                // Backend-friendly aliases (exact keys BackEnd.py currently checks)
+                                    
+                Cost: normalized.Cost || "",                        
+                Pow: normalized.Pow || "",                         
+                Bod: normalized.Bod || "",                    
+                Res: normalized.Res || "",                    
+                subtype: normalized.subtype || "",                 // matches CSV "Subtypes"
+                
+            });
 
-                        console.log("SENDING FILTERS:", filters);
+            console.log("SENDING FILTERS:", filters);
 
-                    try {
-                        const res = await fetch("http://127.0.0.1:5000/search", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                             body: JSON.stringify(filters)
-                        }); 
+        try {
+            const res = await fetch("http://127.0.0.1:5000/search", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(filters)
+            }); 
 
-                        const data = await res.json();
-                        const cards = data.results || [];
+            const data = await res.json();
+            const cards = data.results || [];
 
-                        resultsList.innerHTML = ""; // clear loading text
+            resultsList.innerHTML = ""; // clear loading text
 
-                        if (cards.length === 0) {
-                            resultsList.innerHTML = "<li>No results found.</li>";
-                            return;
-                        }
+            if (cards.length === 0) {
+                resultsList.innerHTML = "<li>No results found.</li>";
+                return;
+            }
 
-                         // Build result list items
-                        cards.forEach(card => {
-                        const li = document.createElement("li");
+                // Build result list items
+            cards.forEach(card => {
+            const li = document.createElement("li");
 
-                        li.innerHTML = `
-                            <div class="card-result">
-                                <strong>Cost:</strong> ${card.Cost ?? "N/A"}<br>
-                                <strong>Pow:</strong> ${card.Pow ?? "N/A"}<br>
-                                <strong>Bod:</strong> ${card.Bod ?? "N/A"}<br>
-                                <strong>Res:</strong> ${card.Res ?? "N/A"}<br>
-                                <strong>Subtype:</strong> ${card.subtype ?? "N/A"}<br>
-                                <br><br>
+            li.innerHTML = `
+                <div class="card-result">
+                    <h3>${card.Title ?? "Unnamed Card"}</h3>
 
-                                <button class="view-btn">View Card</button>
-                                <button onclick="">Add To Decklist</button>
-                                
-                            </div>
-                        `;
-                        
-                        const viewBtn = li.querySelector(".view-btn");
+                    <strong>Cost:</strong> ${card.Cost ?? "N/A"}<br>
+                    <strong>Pow:</strong> ${card.Pow ?? "N/A"}<br>
+                    <strong>Bod:</strong> ${card.Bod ?? "N/A"}<br>
+                    <strong>Res:</strong> ${card.Res ?? "N/A"}<br>
+                    <strong>Subtype:</strong> ${card.subtype ?? "N/A"}<br>
+                    <br>
 
-                        viewBtn.addEventListener("click", () => {
-                            console.log("CLICKED CARD:", card);
+                    <button class="view-btn">View Card</button>
+                </div>
+            `;
+            
+            const viewBtn = li.querySelector(".view-btn");
 
-                            sessionStorage.setItem("selectedCard", JSON.stringify(card));
-                            window.location.href = "NewResult.html";
-                        });
+            viewBtn.addEventListener("click", () => {
+                console.log("CLICKED CARD:", card);
 
-                        resultsList.appendChild(li);
-                        });
+                sessionStorage.setItem("selectedCard", JSON.stringify(card));
+                window.location.href = "NewResult.html";
+            });
 
-                    } catch (err) {
-                        console.error("Search error:", err);
-                        resultsList.innerHTML = "<li>Error fetching results.</li>";
-                    }   
-                 }
+            resultsList.appendChild(li);
+            });
 
-           
-              
-            </script>
+        } catch (err) {
+            console.error("Search error:", err);
+            resultsList.innerHTML = "<li>Error fetching results.</li>";
+        }   
+    }
+</script>
 
+<script>
+function updateNavButton() {
+    const button = document.getElementById("navAccountButton");
+    const username = sessionStorage.getItem("username");
 
+    if (!button) return;
 
+    if (username) {
+        button.textContent = "My Account";
+    } else {
+        button.textContent = "Login";
+    }
+}
+
+function handleNavAccount() {
+    const username = sessionStorage.getItem("username");
+
+    if (username) {
+        window.location.href = "Account.html";
+    } else {
+        window.location.href = "Login.html";
+    }
+}
+
+// Run when page loads
+window.addEventListener("DOMContentLoaded", updateNavButton);
+</script>
+
+</body>
 </html>

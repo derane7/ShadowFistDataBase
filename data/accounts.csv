@@ -1,0 +1,2 @@
+username,password_hash
+testuser,scrypt:32768:8:1$RQQJhenLdYQMmycj$f728775ceb6e4fed5bbe4d0a6ac14f0b67e5034a4eace51051b92a867fe8b85c02f91e7007f6bfc4752b3439ab9a5971919802d254015dd8204bd222a83b4ced

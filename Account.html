@@ -18,7 +18,7 @@
             <section class="account-summary">
                 <div class="summary-card">
                     <h2>Profile</h2>
-                    <p><strong>Username:</strong> SampleUser</p>
+                    <p><strong>Username:</strong> <span id="accountUsername">Loading...</span></p>
                     <p><strong>Decks Saved:</strong> #</p>
                     <p><strong>Last Updated:</strong> (insert time since last update in days)</p>
                 </div>
@@ -26,50 +26,256 @@
                 <div class="summary-card">
                     <h2>Quick Actions</h2>
                     <div class="button-column">
-                        <button type="button" class="primary-action">Create New Deck</button>
-                        <button type="button" class="secondary-action">Load Selected Deck</button>
-                        <button type="button" class="danger-action">Delete Selected Deck</button>
+                        <input type="text" id="deckNameInput" placeholder="Enter deck name">
+                        <button type="button" class="primary-action" onclick="createDeck()">
+                            Create New Deck
+                        </button>
+
+                        <button type="button" class="danger-action" onclick="deleteSelectedDeck()">
+                            Delete Selected Deck
+                        </button>
                     </div>
                 </div>
             </section>
 
             <section class="deck-library">
                 <h2>Your Decks</h2>
-                <div class="deck-list">
-                    <article class="deck-card selected">
-                        <h3>Example Deck 1</h3>
-                        <p>Cards: #</p>
-                        <p>Faction Focus: Example</p>
-                    </article>
-
-                    <article class="deck-card">
-                        <h3>Example Deck 2</h3>
-                        <p>Cards: #</p>
-                        <p>Faction Focus: Example</p>
-                    </article>
-
-                    <article class="deck-card">
-                        <h3>Example Deck 3</h3>
-                        <p>Cards: #</p>
-                        <p>Faction Focus: Example</p>
-                    </article>
+                <div class="deck-list" id="deckList">
+                    <p>No decks loaded yet.</p>
                 </div>
             </section>
 
             <section class="deck-preview">
                 <h2>Selected Deck Preview</h2>
-                <div class="info-box">
-                    <p><strong>Deck Name:</strong> Example Deck 1</p>
-                    <p><strong>Description:</strong> Placeholder description will be listed here later.</p>
-                    <p><strong>Cards:</strong> Placeholder deck contents will be listed here later.</p>
+
+                <div class="deck-preview-actions">
+                    <button type="button" class="primary-action" onclick="location.href='NewSearch.html'">
+                        Add Card
+                    </button>
+
+                    <button type="button" class="danger-action" onclick="removeSelectedCardFromDeck()">
+                        Remove Selected Card
+                    </button>
+                </div>
+
+                <div class="info-box" id="deckPreview">
+                    <p>Select a deck to preview its contents.</p>
                 </div>
             </section>
 
             <div class="button-row spaced-row">
                 <button type="button" class="secondary-action" onclick="location.href='NewSearch.html'">Go to Search</button>
-                <button type="button" class="secondary-action" onclick="location.href='Login.html'">Log Out</button>
+                <button type="button" class="secondary-action" onclick="logoutUser()">Log Out</button>
             </div>
         </section>
     </main>
+
+<script>
+let selectedDeckName = null;
+let selectedCardID = null;
+
+function getCurrentUsername() {
+    return sessionStorage.getItem("username");
+}
+
+function requireLogin() {
+    const username = getCurrentUsername();
+
+    if (!username) {
+        alert("You must log in before managing decks.");
+        window.location.href = "Login.html";
+        return null;
+    }
+
+    return username;
+}
+
+async function createDeck() {
+    const username = requireLogin();
+    if (!username) return;
+
+    const deckName = document.getElementById("deckNameInput").value.trim();
+
+    const response = await fetch("/create-deck", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            username: username,
+            deckName: deckName
+        })
+    });
+
+    const data = await response.json();
+    alert(data.message);
+
+    if (data.status === "success") {
+        document.getElementById("deckNameInput").value = "";
+        loadDecks();
+    }
+}
+
+async function loadDecks() {
+    const username = requireLogin();
+    if (!username) return;
+
+    const response = await fetch("/user-decks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            username: username
+        })
+    });
+
+    const data = await response.json();
+    const deckList = document.getElementById("deckList");
+
+    deckList.innerHTML = "";
+
+    if (!data.decks || Object.keys(data.decks).length === 0) {
+        deckList.innerHTML = "<p>No decks created yet.</p>";
+        return;
+    }
+
+    for (const deckName in data.decks) {
+        const cards = data.decks[deckName];
+
+        const deckCard = document.createElement("article");
+        deckCard.className = "deck-card";
+        deckCard.onclick = () => selectDeck(deckName, cards, deckCard);
+
+        deckCard.innerHTML = `
+            <h3>${deckName}</h3>
+            <p>Cards: ${cards.length}</p>
+            <p>Click to select this deck.</p>
+        `;
+
+        deckList.appendChild(deckCard);
+    }
+}
+
+function selectCardInPreview(cardID, clickedItem) {
+    selectedCardID = cardID;
+
+    document.querySelectorAll(".preview-card-item").forEach(item => {
+        item.classList.remove("selected-preview-card");
+    });
+
+    clickedItem.classList.add("selected-preview-card");
+}
+
+function selectDeck(deckName, cards, clickedCard) {
+    selectedDeckName = deckName;
+    selectedCardID = null;
+
+    document.querySelectorAll(".deck-card").forEach(card => {
+        card.classList.remove("selected");
+    });
+
+    clickedCard.classList.add("selected");
+
+    const deckPreview = document.getElementById("deckPreview");
+
+    if (cards.length === 0) {
+        deckPreview.innerHTML = `
+            <p><strong>Deck Name:</strong> ${deckName}</p>
+            <p><strong>Cards:</strong> No cards added yet.</p>
+        `;
+        return;
+    }
+
+    deckPreview.innerHTML = `
+        <p><strong>Deck Name:</strong> ${deckName}</p>
+        <p><strong>Cards:</strong></p>
+        <ul class="preview-card-list">
+            ${cards.map(card => `
+                <li class="preview-card-item" onclick="selectCardInPreview('${card.card_id}', this)">
+                    ${card.name || card.card_id}
+                </li>
+            `).join("")}
+        </ul>
+    `;
+}
+
+async function deleteSelectedDeck() {
+    const username = requireLogin();
+    if (!username) return;
+
+    if (!selectedDeckName) {
+        alert("Select a deck before deleting.");
+        return;
+    }
+
+    const confirmDelete = confirm(`Delete deck "${selectedDeckName}"?`);
+    if (!confirmDelete) return;
+
+    const response = await fetch("/delete-deck", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            username: username,
+            deckName: selectedDeckName
+        })
+    });
+
+    const data = await response.json();
+    alert(data.message);
+
+    if (data.status === "success") {
+        selectedDeckName = null;
+        document.getElementById("deckPreview").innerHTML = "<p>Select a deck to preview its contents.</p>";
+        loadDecks();
+    }
+}
+
+async function removeSelectedCardFromDeck() {
+    const username = requireLogin();
+    if (!username) return;
+
+    if (!selectedDeckName) {
+        alert("Select a deck first.");
+        return;
+    }
+
+    if (!selectedCardID) {
+        alert("Select a card from the deck preview before removing.");
+        return;
+    }
+
+    const response = await fetch("/remove-card", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            username: username,
+            deckName: selectedDeckName,
+            cardID: selectedCardID
+        })
+    });
+
+    const data = await response.json();
+    alert(data.message);
+
+    if (data.status === "success") {
+        selectedCardID = null;
+
+        document.getElementById("deckPreview").innerHTML = "<p>Select a deck to preview its contents.</p>";
+
+        await loadDecks();
+    }
+}
+
+function logoutUser() {
+    sessionStorage.removeItem("username");
+    window.location.href = "Login.html";
+}
+
+window.onload = function() {
+    const username = requireLogin();
+    if (!username) return;
+
+    document.getElementById("accountUsername").textContent = username;
+    loadDecks();
+};
+</script>
+
 </body>
 </html>

@@ -13,7 +13,7 @@
     <header class="top-nav">
         <div class="nav-title">Shadowfist Database</div>
         <div class="nav-actions">
-            <button class="nav-login-btn" onclick="location.href='Login.html'">
+            <button class="nav-login-btn" id="navAccountButton" onclick="handleNavAccount()">
                 Login
             </button>
         </div>
@@ -77,6 +77,23 @@
                 <p>Extra card/game notes or rulings</p>
             </div>
         </section>
+
+        <section class="info-section">
+            <h2>Deck Options</h2>
+            <div class="info-box deck-options-box">
+                <label for="deckSelect">Select Deck</label>
+                <select id="deckSelect">
+                    <option value="">Loading decks...</option>
+                </select>
+
+                <button type="button" class="primary-action" onclick="addCurrentCardToDeck()">
+                    Add Card to Deck
+                </button>
+
+                <p id="deckMessage"></p>
+            </div>
+        </section>
+
         <script>
             function loadCard() {
 
@@ -119,6 +136,105 @@
             loadCard();
             </script>
     </main>
+
+<script>
+function updateNavButton() {
+    const button = document.getElementById("navAccountButton");
+    const username = sessionStorage.getItem("username");
+
+    if (!button) return;
+
+    if (username) {
+        button.textContent = "My Account";
+    } else {
+        button.textContent = "Login";
+    }
+}
+
+function handleNavAccount() {
+    const username = sessionStorage.getItem("username");
+
+    if (username) {
+        window.location.href = "Account.html";
+    } else {
+        window.location.href = "Login.html";
+    }
+}
+
+// Run when page loads
+window.addEventListener("DOMContentLoaded", updateNavButton);
+</script>
+
+<script>
+async function loadDeckOptions() {
+    const username = sessionStorage.getItem("username");
+    const deckSelect = document.getElementById("deckSelect");
+
+    if (!username) {
+        deckSelect.innerHTML = '<option value="">Log in to use decks</option>';
+        return;
+    }
+
+    const response = await fetch("/user-decks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username })
+    });
+
+    const data = await response.json();
+    deckSelect.innerHTML = '<option value="">Select a deck</option>';
+
+    if (!data.decks || Object.keys(data.decks).length === 0) {
+        deckSelect.innerHTML = '<option value="">No decks found</option>';
+        return;
+    }
+
+    for (const deckName in data.decks) {
+        const option = document.createElement("option");
+        option.value = deckName;
+        option.textContent = deckName;
+        deckSelect.appendChild(option);
+    }
+}
+
+async function addCurrentCardToDeck() {
+    const username = sessionStorage.getItem("username");
+    const deckName = document.getElementById("deckSelect").value;
+    const messageBox = document.getElementById("deckMessage");
+
+    if (!username) {
+        messageBox.textContent = "You must log in before adding cards to a deck.";
+        return;
+    }
+
+    if (!deckName) {
+        messageBox.textContent = "Select a deck first.";
+        return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const cardID = params.get("id") || document.getElementById("cardID").textContent || "placeholder001";
+
+    const card = JSON.parse(sessionStorage.getItem("selectedCard"));
+
+    const response = await fetch("/add-card", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            username: username,
+            deckName: deckName,
+            cardID: card.id,
+            cardName: card.Title
+        })
+    });
+
+    const data = await response.json();
+    messageBox.textContent = data.message;
+}
+
+window.addEventListener("DOMContentLoaded", loadDeckOptions);
+</script>
+
 </body>
 </html>
 
