@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shadowfist Login</title>
-    <link rel="stylesheet" href="NewStyles.css">
+    <link rel="stylesheet" href="Styles.css">
 </head>
 <body class="page-shell">
     <main class="page-frame auth-page">
@@ -35,7 +35,7 @@
             </form>
 
             <div class="panel-footer-links">
-                <a href="NewSearch.html">Continue as Guest</a>
+                <a href="Search.html">Continue as Guest</a>
             </div>
         </section>
     </main>
@@ -69,7 +69,7 @@ async function loginUser() {
 
     if (data.status === "success") {
         sessionStorage.setItem("username", data.username);
-        window.location.href = "NewSearch.html";
+        window.location.href = "Search.html";
     } else {
         showLoginMessage(data.message);
     }

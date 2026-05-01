@@ -84,19 +84,19 @@ def account_page():
     return send_from_directory(".", "Account.html")
 
 
-@app.route("/NewSearch.html")
+@app.route("/Search.html")
 def search_page():
-    return send_from_directory(".", "NewSearch.html")
+    return send_from_directory(".", "Search.html")
 
 
-@app.route("/NewResult.html")
+@app.route("/Result.html")
 def result_page():
-    return send_from_directory(".", "NewResult.html")
+    return send_from_directory(".", "Result.html")
 
 
-@app.route("/NewStyles.css")
+@app.route("/Styles.css")
 def styles():
-    return send_from_directory(".", "NewStyles.css")
+    return send_from_directory(".", "Styles.css")
 
 # ----------------------------
 # Account Features
