@@ -22,8 +22,8 @@
 
  <div class="filter-row">
 
-   <label for="subtype" style="font-weight: bold;  margin-left: 300px; font-size: 26px;">Subtypes:</label>
-            <select name="subtype" id="subtype" multiple>
+   <label for="Subtype" style="font-weight: bold;  margin-left: 300px; font-size: 26px;">Subtypes:</label>
+            <select name="Subtype" id="Subtype" multiple>
                                 
 
                             <option value="Feng Shui Site">Feng Shui Sites</option>
@@ -121,7 +121,7 @@
         resultsList.innerHTML = "Loading...";
         // Collect all filter values (ALL your dropdowns + inputs)
         const rawFilters = {
-            subtype: Array.from(document.getElementById("subtype").selectedOptions).map(o => o.value),
+            Subtype: Array.from(document.getElementById("Subtype").selectedOptions).map(o => o.value),
             Cost: document.getElementById("Cost").value,
             Pow: document.getElementById("Pow").value,
             Bod: document.getElementById("Bod").value,
@@ -146,7 +146,7 @@
                 Pow: normalized.Pow || "",                         
                 Bod: normalized.Bod || "",                    
                 Res: normalized.Res || "",                    
-                subtype: normalized.subtype || "",                 // matches CSV "Subtypes"
+                Subtype: normalized.Subtype || "",                 // matches CSV "Subtypes"
                 
             });
 
@@ -181,7 +181,7 @@
                     <strong>Pow:</strong> ${card.Pow ?? "N/A"}<br>
                     <strong>Bod:</strong> ${card.Bod ?? "N/A"}<br>
                     <strong>Res:</strong> ${card.Res ?? "N/A"}<br>
-                    <strong>Subtype:</strong> ${card.subtype ?? "N/A"}<br>
+                    <strong>Subtype:</strong> ${card.Subtype ?? "N/A"}<br>
                     <br>
 
                     <button class="view-btn">View Card</button>
