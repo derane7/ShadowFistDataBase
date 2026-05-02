@@ -69,7 +69,7 @@ async function loginUser() {
 
     if (data.status === "success") {
         sessionStorage.setItem("username", data.username);
-        window.location.href = "Search.html";
+        window.location.href = "Account.html";
     } else {
         showLoginMessage(data.message);
     }
