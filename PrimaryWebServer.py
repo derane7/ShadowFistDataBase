@@ -46,7 +46,7 @@ if not df.empty:
     df = df.replace({np.nan: ""})
 
     # Ensure all used columns exist as strings
-    for col in ["Title", "subtype", "Cost", "Pow", "Bod", "Res"]:
+    for col in ["Title", "Subtype", "Cost", "Pow", "Bod", "Res"]:
         if col in df.columns:
             df[col] = df[col].astype(str).fillna("")
 else:
@@ -56,7 +56,7 @@ else:
 df = df.replace({np.nan: ""})
 
 # Ensure all used columns exist as strings
-for col in ["Title", "subtype", "Cost", "Pow", "Bod", "Res"]:
+for col in ["Title", "Subtype", "Cost", "Pow", "Bod", "Res"]:
     if col in df.columns:
         df[col] = df[col].astype(str).fillna("")
 
@@ -192,7 +192,7 @@ def search_cards():
                     "Pow": "5",
                     "Bod": "4",
                     "Res": "1",
-                    "subtype": "Dragon Character",
+                    "Subtype": "Dragon Character",
                     "text": "This is a manually created test card for deck testing."
                 }
             ]
@@ -210,13 +210,13 @@ def search_cards():
         # ------------------------
         # INPUTS (safe conversion)
         # ------------------------
-        subtype = str(data.get("subtype", "")).strip()
+        Subtype = str(data.get("Subtype", "")).strip()
         keyword = str(data.get("keywordSearch", "")).strip()
         
-        print("SUBTYPE INPUT:", repr(subtype))
-        print("SAMPLE DF VALUES:", df["subtype"].head(10).tolist()) 
-        print("FILTER CHECK:", subtype)
-        print(df["subtype"].unique()[:10])
+        print("Subtype INPUT:", repr(Subtype))
+        print("SAMPLE DF VALUES:", df["Subtype"].head(10).tolist()) 
+        print("FILTER CHECK:", Subtype)
+        print(df["Subtype"].unique()[:10])
 
         cost = str(data.get("Cost", "")).strip()
         pow= str(data.get("Pow", "")).strip()
@@ -224,16 +224,16 @@ def search_cards():
         res = str(data.get("Res", "")).strip()
 
         # ------------------------
-        # SUBTYPE FILTER
+        # Subtype FILTER
         # ------------------------
-        if subtype:
+        if Subtype:
             results = results[
-                results["subtype"]
+                results["Subtype"]
                 .str.casefold()
-                .str.contains(subtype.casefold(), na=False)
+                .str.contains(Subtype.casefold(), na=False)
             ]
 
-        print(results["subtype"].value_counts().head(20))
+        print(results["Subtype"].value_counts().head(20))
 
         # ------------------------
         # COST FILTER
@@ -273,7 +273,7 @@ def search_cards():
         if keyword:
             results = results[
                 results["Title"].astype(str).str.contains(keyword, case=False, na=False)
-                | results["subtype"].astype(str).str.contains(keyword, case=False, na=False)
+                | results["Subtype"].astype(str).str.contains(keyword, case=False, na=False)
             ]
 
         # ------------------------
