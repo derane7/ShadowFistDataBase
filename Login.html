@@ -3,39 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shadowfist Login</title>
+    <title>Shadowfist — Login</title>
     <link rel="stylesheet" href="Styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: { extend: {
+            colors: {
+                'sf-void': '#0a0707', 'sf-ink': '#140b0b', 'sf-ink-2': '#1f1212',
+                'sf-paper': '#ede1c4', 'sf-parchment': '#d9c79a', 'sf-parchment-2': '#b8a373',
+                'sf-blood': '#7a1418', 'sf-crimson': '#b21e23', 'sf-ember': '#e04b2a',
+                'sf-gold-dark': '#6e5522', 'sf-gold': '#b08a3e', 'sf-gold-bright': '#e8c170',
+            },
+            fontFamily: {
+                'display': ['"Cinzel Decorative"', 'serif'],
+                'heading': ['Cinzel', 'serif'],
+                'body': ['"Cormorant Garamond"', 'Georgia', 'serif'],
+                'hanzi': ['"Noto Serif SC"', 'serif'],
+            },
+            boxShadow: {
+                'sf': '0 6px 22px rgba(0,0,0,0.65)',
+                'sf-deep': '0 14px 38px rgba(0,0,0,0.8)',
+                'sf-glow-gold': '0 0 24px rgba(232, 193, 112, 0.18)',
+                'sf-glow-crimson': '0 0 22px rgba(178, 30, 35, 0.35)',
+            },
+            keyframes: { fadeUp: { '0%': { opacity: '0', transform: 'translateY(12px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } },
+            animation: { 'fade-up': 'fadeUp 0.5s ease both' },
+        } }
+    }
+    </script>
 </head>
-<body class="page-shell">
-    <main class="page-frame auth-page">
-        <section class="panel-box">
-            <div class="panel-header">
-                <h3 class="eyebrow">Shadowfist Database</h3>
-                <h1>Login</h1>
-                <p class="panel-subtext">Enter your account information to access decks, saved cards, and search tools.</p>
-            </div>
+<body class="font-body text-sf-paper">
 
-            <form class="stack-form">
-                <div class="field-group">
-                    <label for="loginUsername">Username</label>
-                    <input type="text" id="loginUsername" name="loginUsername" placeholder="Enter username">
+    <header class="border-b border-sf-gold-dark/40">
+        <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-center sm:justify-between">
+            <a href="Search.html" class="flex items-center gap-3">
+                <span class="font-hanzi text-sf-crimson text-xl tracking-[0.3em]">影&nbsp;拳</span>
+                <span class="font-display font-black text-sf-gold-bright tracking-[0.22em] text-base hidden sm:inline">SHADOWFIST DATABASE</span>
+            </a>
+            <a href="Search.html" class="hidden sm:inline-block font-heading text-[0.7rem] tracking-[0.22em] uppercase text-sf-parchment hover:text-sf-gold-bright transition">
+                Browse as Guest →
+            </a>
+        </div>
+    </header>
+
+    <main class="relative max-w-md mx-auto px-6 py-16">
+
+        <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-[20%] left-1/2 -translate-x-1/2 w-[420px] h-[420px] rounded-full bg-sf-crimson/15 blur-3xl"></div>
+        </div>
+
+        <div class="relative text-center mb-8 animate-[fadeUp_0.5s_ease_both]">
+            <p class="font-hanzi text-sf-crimson text-2xl tracking-[0.5em] mb-3 opacity-85">入&nbsp;門</p>
+            <p class="font-heading text-[0.7rem] tracking-[0.3em] uppercase text-sf-parchment-2 mb-2">Shadowfist Database</p>
+            <h1 class="font-display font-black text-sf-gold-bright text-4xl tracking-wide">Login</h1>
+            <p class="font-body italic text-sf-parchment-2 mt-3 text-base">Enter your credentials to access decks and saved cards.</p>
+        </div>
+
+        <section class="sf-frame relative p-8 bg-gradient-to-b from-sf-ink-2/95 to-sf-ink/98 border border-sf-gold-dark shadow-sf-deep animate-[fadeUp_0.5s_ease_both]" style="animation-delay:0.1s;">
+            <form class="relative space-y-5" onsubmit="event.preventDefault(); loginUser();">
+
+                <div>
+                    <label for="loginUsername" class="block font-heading text-[0.7rem] tracking-[0.22em] uppercase text-sf-parchment-2 mb-1.5">Username</label>
+                    <input type="text" id="loginUsername" name="loginUsername" placeholder="Enter username"
+                           class="w-full bg-sf-void border border-sf-gold-dark text-sf-paper placeholder-sf-paper/35 px-4 py-2.5 focus:outline-none focus:border-sf-crimson focus:shadow-sf-glow-crimson transition italic">
                 </div>
 
-                <div class="field-group">
-                    <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter password">
+                <div>
+                    <label for="loginPassword" class="block font-heading text-[0.7rem] tracking-[0.22em] uppercase text-sf-parchment-2 mb-1.5">Password</label>
+                    <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter password"
+                           class="w-full bg-sf-void border border-sf-gold-dark text-sf-paper placeholder-sf-paper/35 px-4 py-2.5 focus:outline-none focus:border-sf-crimson focus:shadow-sf-glow-crimson transition">
                 </div>
 
-                <div id="authMessageBox" class="error-box" style="display: none;"></div>
+                <div id="authMessageBox" class="hidden text-sf-ember italic text-sm border border-sf-ember/40 bg-sf-ember/5 px-3 py-2"></div>
 
-                <div class="button-row centered-row">
-                    <button type="button" class="primary-action" onclick="loginUser()">Log In</button>
-                    <button type="button" class="secondary-action" onclick="location.href='CreateAccount.html'">Create Account</button>
+                <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                    <button type="button" onclick="loginUser()"
+                            class="flex-1 px-6 py-3 font-heading text-xs tracking-[0.28em] uppercase text-sf-paper bg-gradient-to-b from-sf-blood to-[#5a0d10] border border-sf-gold hover:shadow-sf-glow-crimson hover:-translate-y-0.5 transition shadow-sf">
+                        Log In
+                    </button>
+                    <button type="button" onclick="location.href='CreateAccount.html'"
+                            class="flex-1 px-6 py-3 font-heading text-xs tracking-[0.28em] uppercase text-sf-gold-bright border border-sf-gold-dark hover:border-sf-gold hover:bg-sf-gold-bright/10 hover:shadow-sf-glow-gold transition">
+                        Create Account
+                    </button>
                 </div>
             </form>
 
-            <div class="panel-footer-links">
-                <a href="Search.html">Continue as Guest</a>
+            <div class="relative flex items-center gap-3 my-6">
+                <span class="flex-1 h-px bg-gradient-to-r from-transparent via-sf-gold/40 to-transparent"></span>
+                <span class="font-heading text-[0.65rem] tracking-[0.3em] uppercase text-sf-parchment-2">Or</span>
+                <span class="flex-1 h-px bg-gradient-to-r from-transparent via-sf-gold/40 to-transparent"></span>
+            </div>
+
+            <div class="relative text-center">
+                <a href="Search.html" class="inline-block font-heading text-[0.75rem] tracking-[0.22em] uppercase text-sf-gold-bright border-b border-sf-gold-dark hover:border-sf-gold hover:text-sf-ember transition pb-0.5">
+                    Continue as Guest
+                </a>
+                <p class="text-xs italic text-sf-parchment-2/70 mt-3 leading-relaxed">Guests can browse and search but cannot save decks.</p>
             </div>
         </section>
     </main>
@@ -43,13 +107,13 @@
 <script>
 function showLoginMessage(message) {
     const box = document.getElementById("authMessageBox");
-    box.style.display = "block";
+    box.classList.remove("hidden");
     box.textContent = message;
 }
 
 function clearLoginMessage() {
     const box = document.getElementById("authMessageBox");
-    box.style.display = "none";
+    box.classList.add("hidden");
     box.textContent = "";
 }
 
@@ -59,19 +123,23 @@ async function loginUser() {
     const username = document.getElementById("loginUsername").value;
     const password = document.getElementById("loginPassword").value;
 
-    const response = await fetch("/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-    });
+    try {
+        const response = await fetch("/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+        });
 
-    const data = await response.json();
+        const data = await response.json();
 
-    if (data.status === "success") {
-        sessionStorage.setItem("username", data.username);
-        window.location.href = "Account.html";
-    } else {
-        showLoginMessage(data.message);
+        if (data.status === "success") {
+            sessionStorage.setItem("username", data.username);
+            window.location.href = "Account.html";
+        } else {
+            showLoginMessage(data.message);
+        }
+    } catch (err) {
+        showLoginMessage("Cannot reach the server. Make sure it is running.");
     }
 }
 </script>
