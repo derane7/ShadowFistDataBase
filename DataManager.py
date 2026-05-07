@@ -10,6 +10,22 @@ ACCOUNT_FIELDS = ["username", "password_hash"]
 DECK_FIELDS = ["username", "deck_name", "card_id", "name"]
 
 
+def success_response(message, **extra):
+    response = {
+        "status": "success",
+        "message": message
+    }
+    response.update(extra)
+    return response
+
+
+def error_response(message):
+    return {
+        "status": "error",
+        "message": message
+    }
+
+
 def ensure_data_files():
     os.makedirs(DATA_FOLDER, exist_ok=True)
 
@@ -40,14 +56,6 @@ def write_csv(filename, fieldnames, rows):
         writer.writerows(rows)
 
 
-def error_response(error_code, message):
-    return {
-        "status": "error",
-        "errorCode": error_code,
-        "message": message
-    }
-
-
 def create_account(username, password):
     ensure_data_files()
 
@@ -55,19 +63,19 @@ def create_account(username, password):
     password = password.strip()
 
     if not username and not password:
-        return error_response("AUTH_006", "Username and password cannot be blank.")
+        return error_response("Username and password cannot be blank.")
 
     if not username:
-        return error_response("AUTH_003", "Username cannot be blank.")
+        return error_response("Username cannot be blank.")
 
     if not password:
-        return error_response("AUTH_004", "Password cannot be blank.")
+        return error_response("Password cannot be blank.")
 
     accounts = read_csv(ACCOUNTS_FILE)
 
     for account in accounts:
         if account.get("username") == username:
-            return error_response("AUTH_002", "Username already exists.")
+            return error_response("Username already exists.")
 
     accounts.append({
         "username": username,
@@ -76,11 +84,7 @@ def create_account(username, password):
 
     write_csv(ACCOUNTS_FILE, ACCOUNT_FIELDS, accounts)
 
-    return {
-        "status": "success",
-        "response": "accountCreated",
-        "message": "Account created successfully."
-    }
+    return success_response("Account created successfully.")
 
 
 def login(username, password):
@@ -90,13 +94,13 @@ def login(username, password):
     password = password.strip()
 
     if not username and not password:
-        return error_response("AUTH_006", "Username and password cannot be blank.")
+        return error_response("Username and password cannot be blank.")
 
     if not username:
-        return error_response("AUTH_003", "Username cannot be blank.")
+        return error_response("Username cannot be blank.")
 
     if not password:
-        return error_response("AUTH_004", "Password cannot be blank.")
+        return error_response("Password cannot be blank.")
 
     accounts = read_csv(ACCOUNTS_FILE)
 
@@ -105,19 +109,14 @@ def login(username, password):
             stored_hash = account.get("password_hash", "")
 
             if check_password_hash(stored_hash, password):
-                return {
-                    "status": "success",
-                    "response": "loginSuccess",
-                    "message": "Login successful.",
-                    "username": username
-                }
+                return success_response(
+                    "Login successful.",
+                    username=username
+                )
 
-            return error_response("AUTH_001", "Wrong username or password.")
+            return error_response("Wrong username or password.")
 
-    return error_response(
-        "AUTH_007",
-        "No account with that username exists. Please create an account first."
-    )
+    return error_response("No account with that username exists. Please create an account first.")
 
 
 def create_deck(username, deck_name):
@@ -127,16 +126,16 @@ def create_deck(username, deck_name):
     deck_name = deck_name.strip()
 
     if not username:
-        return error_response("AUTH_005", "User must be logged in to perform this action.")
+        return error_response("User must be logged in to perform this action.")
 
     if not deck_name:
-        return error_response("DECK_001", "Deck name cannot be blank.")
+        return error_response("Deck name cannot be blank.")
 
     decks = read_csv(DECKS_FILE)
 
     for deck in decks:
         if deck.get("username") == username and deck.get("deck_name") == deck_name:
-            return error_response("DECK_002", "Deck already exists.")
+            return error_response("Deck already exists.")
 
     decks.append({
         "username": username,
@@ -147,12 +146,10 @@ def create_deck(username, deck_name):
 
     write_csv(DECKS_FILE, DECK_FIELDS, decks)
 
-    return {
-        "status": "success",
-        "response": "deckCreated",
-        "message": "Deck created successfully.",
-        "deckName": deck_name
-    }
+    return success_response(
+        "Deck created successfully.",
+        deckName=deck_name
+    )
 
 
 def delete_deck(username, deck_name):
@@ -160,6 +157,12 @@ def delete_deck(username, deck_name):
 
     username = username.strip()
     deck_name = deck_name.strip()
+
+    if not username:
+        return error_response("User must be logged in to perform this action.")
+
+    if not deck_name:
+        return error_response("Deck name cannot be blank.")
 
     decks = read_csv(DECKS_FILE)
 
@@ -169,7 +172,7 @@ def delete_deck(username, deck_name):
     ]
 
     if not matching_rows:
-        return error_response("DECK_003", "Deck not found.")
+        return error_response("Deck not found.")
 
     updated_decks = [
         deck for deck in decks
@@ -178,12 +181,10 @@ def delete_deck(username, deck_name):
 
     write_csv(DECKS_FILE, DECK_FIELDS, updated_decks)
 
-    return {
-        "status": "success",
-        "response": "deckDeleted",
-        "message": "Deck deleted successfully.",
-        "deckName": deck_name
-    }
+    return success_response(
+        "Deck deleted successfully.",
+        deckName=deck_name
+    )
 
 
 def add_card_to_deck(username, deck_name, card_id, card_name):
@@ -195,13 +196,13 @@ def add_card_to_deck(username, deck_name, card_id, card_name):
     card_name = card_name.strip()
 
     if not username:
-        return error_response("AUTH_005", "User must be logged in to perform this action.")
+        return error_response("User must be logged in to perform this action.")
 
     if not deck_name:
-        return error_response("DECK_001", "Deck name cannot be blank.")
+        return error_response("Deck name cannot be blank.")
 
     if not card_id:
-        return error_response("CARD_002", "Invalid card ID.")
+        return error_response("Invalid card ID.")
 
     if not card_name:
         card_name = card_id
@@ -215,10 +216,10 @@ def add_card_to_deck(username, deck_name, card_id, card_name):
             deck_exists = True
 
             if deck.get("card_id") == card_id:
-                return error_response("DECK_006", "Card is already in this deck.")
+                return error_response("Card is already in this deck.")
 
     if not deck_exists:
-        return error_response("DECK_003", "Deck not found.")
+        return error_response("Deck not found.")
 
     decks.append({
         "username": username,
@@ -229,14 +230,12 @@ def add_card_to_deck(username, deck_name, card_id, card_name):
 
     write_csv(DECKS_FILE, DECK_FIELDS, decks)
 
-    return {
-        "status": "success",
-        "response": "cardAdded",
-        "message": "Card added to deck.",
-        "deckName": deck_name,
-        "cardID": card_id,
-        "cardName": card_name
-    }
+    return success_response(
+        "Card added to deck.",
+        deckName=deck_name,
+        cardID=card_id,
+        cardName=card_name
+    )
 
 
 def remove_card_from_deck(username, deck_name, card_id):
@@ -245,6 +244,15 @@ def remove_card_from_deck(username, deck_name, card_id):
     username = username.strip()
     deck_name = deck_name.strip()
     card_id = card_id.strip()
+
+    if not username:
+        return error_response("User must be logged in to perform this action.")
+
+    if not deck_name:
+        return error_response("Deck name cannot be blank.")
+
+    if not card_id:
+        return error_response("Invalid card ID.")
 
     decks = read_csv(DECKS_FILE)
 
@@ -264,23 +272,25 @@ def remove_card_from_deck(username, deck_name, card_id):
             updated_decks.append(deck)
 
     if not card_found:
-        return error_response("DECK_007", "Card is not in this deck.")
+        return error_response("Card is not in this deck.")
 
     write_csv(DECKS_FILE, DECK_FIELDS, updated_decks)
 
-    return {
-        "status": "success",
-        "response": "cardRemoved",
-        "message": "Card removed from deck.",
-        "deckName": deck_name,
-        "cardID": card_id
-    }
+    return success_response(
+        "Card removed from deck.",
+        deckName=deck_name,
+        cardID=card_id
+    )
 
 
 def get_user_decks(username):
     ensure_data_files()
 
     username = username.strip()
+
+    if not username:
+        return error_response("User must be logged in to view decks.")
+
     decks = read_csv(DECKS_FILE)
 
     user_decks = {}
@@ -303,8 +313,7 @@ def get_user_decks(username):
                     "name": card_name or card_id
                 })
 
-    return {
-        "status": "success",
-        "response": "returnDecks",
-        "decks": user_decks
-    }
+    return success_response(
+        "Decks loaded successfully.",
+        decks=user_decks
+    )

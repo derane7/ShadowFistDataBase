@@ -29,7 +29,7 @@ file is missing, /search returns a single placeholder card so the rest of
 the app still works for testing.
 """
 
-from flask import Flask, request, jsonify, send_from_directory, make_response
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import pandas as pd
 import numpy as np
