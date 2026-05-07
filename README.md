@@ -84,7 +84,7 @@ Option 1 — Clone Using Git
 Open Comman Prompt, Powershell, or a Terminal in the desired location and run:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/derane7/ShadowFistDataBase.git
 cd ShadowFistDatabase
 ```
 
