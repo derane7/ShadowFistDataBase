@@ -83,8 +83,10 @@ Option 1 — Clone Using Git
 
 Open Comman Prompt, Powershell, or a Terminal in the desired location and run:
 
+```bash
 git clone <repository-url>
 cd ShadowFistDatabase
+```
 
 Option 2 — Download ZIP from GitHub
 This method is easier for users unfamiliar with Git.
@@ -111,15 +113,17 @@ OR “Open in Terminal”
 
 Inside the open terminal run the command:
 
+```bash
 pip install flask flask-cors pandas openpyxl numpy
-
+```
 
 ### 3. Run the Server
 
 Inside the open terminal run the command:
 
+```bash
 python PrimaryWebServer.py
-
+```
 
 ### 4. Open the Application
 
