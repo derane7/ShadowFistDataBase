@@ -1,235 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shadowfist card</title>
+    <title>Shadowfist — Card Details</title>
     <link rel="stylesheet" href="Styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: { extend: {
+            colors: {
+                'sf-void': '#0a0707', 'sf-ink': '#140b0b', 'sf-ink-2': '#1f1212',
+                'sf-paper': '#ede1c4', 'sf-parchment': '#d9c79a', 'sf-parchment-2': '#b8a373',
+                'sf-blood': '#7a1418', 'sf-crimson': '#b21e23', 'sf-ember': '#e04b2a',
+                'sf-gold-dark': '#6e5522', 'sf-gold': '#b08a3e', 'sf-gold-bright': '#e8c170',
+            },
+            fontFamily: {
+                'display': ['"Cinzel Decorative"', 'serif'],
+                'heading': ['Cinzel', 'serif'],
+                'body': ['"Cormorant Garamond"', 'Georgia', 'serif'],
+                'hanzi': ['"Noto Serif SC"', 'serif'],
+            },
+            boxShadow: {
+                'sf': '0 6px 22px rgba(0,0,0,0.65)',
+                'sf-deep': '0 14px 38px rgba(0,0,0,0.8)',
+                'sf-glow-gold': '0 0 24px rgba(232, 193, 112, 0.18)',
+                'sf-glow-crimson': '0 0 22px rgba(178, 30, 35, 0.35)',
+            },
+            keyframes: { fadeUp: { '0%': { opacity: '0', transform: 'translateY(12px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } },
+            animation: { 'fade-up': 'fadeUp 0.5s ease both' },
+        } }
+    }
+    </script>
 </head>
+<body class="font-body text-sf-paper">
 
-<body>
-    <!-- Navigation Bar -->
-    <header class="top-nav">
-        <div class="nav-title">Shadowfist Database</div>
-        <div class="nav-actions">
-            <button class="nav-login-btn" id="navAccountButton" onclick="handleNavAccount()">
-                Login
-            </button>
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-sf-void/85 border-b border-sf-gold-dark/40">
+        <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+            <a href="Search.html" class="flex items-center gap-3">
+                <span class="font-hanzi text-sf-crimson text-xl tracking-[0.3em]">影&nbsp;拳</span>
+                <span class="font-display font-black text-sf-gold-bright tracking-[0.22em] text-base hidden sm:inline">SHADOWFIST DATABASE</span>
+            </a>
+            <nav class="flex items-center gap-4 font-heading text-xs tracking-[0.22em] uppercase">
+                <a href="Search.html" class="text-sf-parchment hover:text-sf-gold-bright transition">Search</a>
+                <button class="px-3 py-1.5 border border-sf-gold-dark text-sf-gold-bright hover:border-sf-gold hover:bg-sf-gold-bright/10 transition"
+                        id="navAccountButton" onclick="handleNavAccount()">Login</button>
+            </nav>
         </div>
     </header>
 
-    <main class="details-page">
-        <section class="card-header-box">
-            <div class="card-image-panel">
-                <img id="cardImage" src="https://via.placeholder.com/300x420.png?text=Card+Image" alt="Card Image">
-            </div>
+    <main class="max-w-5xl mx-auto px-6 py-8">
 
-            <div class="card-info-panel">
-                <h1 class="card-name">Card Name here</h1>
-                <div class="card-subtiltes">
-                    <span class="card-type">Card Type</span>
-                    <span class="card-subtype">Card Subtype</span>
-                    <span class="card-faction">Card Faction</span>
+        <a href="Search.html"
+           class="inline-flex items-center gap-2 font-heading text-[0.65rem] tracking-[0.22em] uppercase text-sf-parchment-2 hover:text-sf-gold-bright transition mb-6">
+            ◀ Back to Archive
+        </a>
+
+        <!-- No-card state -->
+        <div id="cardNotFound" class="hidden text-center py-24">
+            <p class="font-hanzi text-sf-crimson text-5xl opacity-60 mb-4">空</p>
+            <p class="font-body italic text-sf-parchment-2 text-lg mb-6">No card was selected.</p>
+            <a href="Search.html" class="inline-block px-6 py-2.5 font-heading text-xs tracking-[0.24em] uppercase text-sf-gold-bright border border-sf-gold-dark hover:border-sf-gold hover:bg-sf-gold-bright/10 transition">
+                Back to Search
+            </a>
+        </div>
+
+        <div id="cardContent" class="animate-[fadeUp_0.5s_ease_both]">
+
+            <!-- ======== HERO BAND ======== -->
+            <!-- Red left-edge accent + atmospheric bg -->
+            <section class="relative overflow-hidden border border-sf-gold-dark shadow-sf-deep">
+                <div class="absolute left-0 inset-y-0 w-1 bg-gradient-to-b from-sf-crimson via-sf-gold to-sf-crimson opacity-80 z-10"></div>
+                <div class="absolute inset-0 bg-gradient-to-br from-sf-ink-2 via-sf-ink to-sf-void"></div>
+                <div class="absolute -top-12 -right-12 w-72 h-72 rounded-full bg-sf-crimson/10 blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-12 -left-12 w-72 h-72 rounded-full bg-sf-gold/5 blur-3xl pointer-events-none"></div>
+
+                <div class="relative pl-8 pr-8 pt-8 pb-6">
+                    <!-- Subtype pill -->
+                    <p class="card-subtype font-heading text-[0.6rem] tracking-[0.3em] uppercase text-sf-crimson mb-2"></p>
+
+                    <!-- Card name -->
+                    <h1 class="card-name font-display font-black text-sf-gold-bright text-4xl sm:text-5xl leading-tight tracking-wide mb-4">—</h1>
+
+                    <!-- Chips (Designator / Keyword) -->
+                    <div class="card-chips flex flex-wrap gap-2 mb-5"></div>
+
+                    <!-- Flavor quote -->
+                    <blockquote class="card-flavor-text hidden italic text-sf-parchment/75 text-base border-l-2 border-sf-gold/40 pl-4 max-w-2xl"></blockquote>
                 </div>
-                <p class="card-flavor-text">Flavor text</p>
-            </div>
+            </section>
 
-            <div class="stats-panel">
-                <div class="stat-box">
-                    <h3>Cost</h3>
-                    <p id="cardCost">#</p>
+            <!-- ======== STATS ROW ======== -->
+            <div class="grid grid-cols-4 border-l border-r border-b border-sf-gold-dark" style="animation-delay:0.06s;">
+                <div class="stat-cell text-center py-5 border-r border-sf-gold-dark bg-sf-ink/80">
+                    <div class="font-heading text-[0.55rem] tracking-[0.3em] uppercase text-sf-parchment-2 mb-1">Cost</div>
+                    <div id="cardCost" class="font-heading font-bold text-sf-gold-bright text-3xl">—</div>
                 </div>
-                <div class="stat-box">
-                    <h3>Power</h3>
-                    <p id="cardPower">#</p>
+                <div class="stat-cell text-center py-5 border-r border-sf-gold-dark bg-sf-ink/80">
+                    <div class="font-heading text-[0.55rem] tracking-[0.3em] uppercase text-sf-parchment-2 mb-1">Power</div>
+                    <div id="cardPower" class="font-heading font-bold text-sf-gold-bright text-3xl">—</div>
                 </div>
-                <div class="stat-box">
-                    <h3>Bod</h3>
-                    <p id="cardBod">#</p>
+                <div class="stat-cell text-center py-5 border-r border-sf-gold-dark bg-sf-ink/80">
+                    <div class="font-heading text-[0.55rem] tracking-[0.3em] uppercase text-sf-parchment-2 mb-1">Bod</div>
+                    <div id="cardBod" class="font-heading font-bold text-sf-gold-bright text-3xl">—</div>
                 </div>
-                <div class="stat-box">
-                    <h3>Res</h3>
-                    <p id="cardRes">#</p>
+                <div class="stat-cell text-center py-5 bg-sf-ink/80">
+                    <div class="font-heading text-[0.55rem] tracking-[0.3em] uppercase text-sf-parchment-2 mb-1">Res</div>
+                    <div id="cardRes" class="font-heading font-bold text-sf-gold-bright text-3xl">—</div>
                 </div>
             </div>
 
-            <div class="meta-grid">
-                <div><strong>ID:</strong> <span id="cardID">-</span></div>
-                <div><strong>Rarity:</strong> <span id="cardRarity">-</span></div>
-                <div><strong>Set:</strong> <span id="cardSet">-</span></div>
-                <div><strong>Unique:</strong> <span id="cardUnique">-</span></div>
+            <!-- ======== DETAIL GRID (meta | text) ======== -->
+            <div class="grid md:grid-cols-[2fr_3fr] border-l border-r border-b border-sf-gold-dark mb-8" style="animation-delay:0.1s;">
+
+                <!-- Left col: meta + add to deck -->
+                <div class="border-b md:border-b-0 md:border-r border-sf-gold-dark bg-sf-ink-2/80 p-6 flex flex-col gap-6">
+
+                    <div>
+                        <h2 class="font-heading text-[0.6rem] tracking-[0.28em] uppercase text-sf-gold pb-2 mb-4 border-b border-sf-gold/20">Card Info</h2>
+                        <dl class="space-y-3 text-sm">
+                            <div class="flex justify-between gap-2">
+                                <dt class="font-heading text-[0.55rem] tracking-[0.2em] uppercase text-sf-parchment-2 self-center">Set</dt>
+                                <dd id="cardSet" class="text-sf-paper text-right">—</dd>
+                            </div>
+                            <div class="flex justify-between gap-2">
+                                <dt class="font-heading text-[0.55rem] tracking-[0.2em] uppercase text-sf-parchment-2 self-center">Rarity</dt>
+                                <dd id="cardRarity" class="text-sf-paper text-right">—</dd>
+                            </div>
+                            <div class="flex justify-between gap-2">
+                                <dt class="font-heading text-[0.55rem] tracking-[0.2em] uppercase text-sf-parchment-2 self-center">Unique</dt>
+                                <dd id="cardUnique" class="text-sf-paper text-right">—</dd>
+                            </div>
+                            <div class="flex justify-between gap-2">
+                                <dt class="font-heading text-[0.55rem] tracking-[0.2em] uppercase text-sf-parchment-2 self-center">Artist</dt>
+                                <dd id="cardArtist" class="text-sf-paper text-right italic">—</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- Add to Deck (inline, no separate section) -->
+                    <div id="deckBar">
+                        <h2 class="font-heading text-[0.6rem] tracking-[0.28em] uppercase text-sf-gold pb-2 mb-3 border-b border-sf-gold/20">Add to Deck</h2>
+                        <div class="flex flex-col gap-2">
+                            <select id="deckSelect"
+                                    class="bg-sf-void border border-sf-gold-dark text-sf-paper px-3 py-2 text-sm focus:outline-none focus:border-sf-crimson transition w-full">
+                                <option value="">Loading decks…</option>
+                            </select>
+                            <button type="button" onclick="addCurrentCardToDeck()"
+                                    class="px-4 py-2 font-heading text-[0.6rem] tracking-[0.26em] uppercase text-sf-paper bg-gradient-to-b from-sf-blood to-[#5a0d10] border border-sf-gold hover:shadow-sf-glow-crimson transition w-full">
+                                Add to Deck
+                            </button>
+                            <p id="deckMessage" class="text-xs italic text-sf-parchment-2 min-h-[1.1rem]"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right col: card text -->
+                <div class="bg-sf-ink/80 p-6">
+                    <h2 class="font-heading text-[0.6rem] tracking-[0.28em] uppercase text-sf-gold pb-2 mb-4 border-b border-sf-gold/20">Card Text</h2>
+                    <div id="cardNotes" class="space-y-4">
+                        <p class="text-sf-parchment-2 italic text-sm">No card text available.</p>
+                    </div>
+                </div>
             </div>
-        </section>
 
-        <section class="info-section">
-            <h2>Keywords / Traits</h2>
-            <div class="info-box" id="cardKeywords">
-                <p>Keyword 1</p>
-                <p>Keyword 2</p>
-                <p>Keyword 3</p>
-            </div>
-        </section>
-
-        <section class="info-section">
-            <h2>Notes</h2>
-            <div class="info-box" id="cardNotes">
-                <p>Extra card/game notes or rulings</p>
-            </div>
-        </section>
-
-        <section class="info-section">
-            <h2>Deck Options</h2>
-            <div class="info-box deck-options-box">
-                <label for="deckSelect">Select Deck</label>
-                <select id="deckSelect">
-                    <option value="">Loading decks...</option>
-                </select>
-
-                <button type="button" class="primary-action" onclick="addCurrentCardToDeck()">
-                    Add Card to Deck
-                </button>
-
-                <p id="deckMessage"></p>
-            </div>
-        </section>
-
-        <script>
-            function loadCard() {
-
-                // 🔥 DEBUG: check if data exists
-                const stored = sessionStorage.getItem("selectedCard");
-                console.log("SESSION RAW:", stored);
-
-                if (!stored) {
-                    console.error("No card found in sessionStorage");
-                    return;
-                }
-
-                const card = JSON.parse(stored);
-                console.log("PARSED CARD:", card);
-
-                // 🃏 Main info
-                document.querySelector(".card-name").textContent = card.Title || "Unknown";
-
-                document.querySelector(".card-subtype").textContent = card.subtype || "-";
-
-                // Stats
-                document.getElementById("cardCost").textContent = card.Cost || "-";
-                document.getElementById("cardPower").textContent = card.Pow || "-";
-                document.getElementById("cardBod").textContent = card.Bod || "-";
-                document.getElementById("cardRes").textContent = card.Res || "-";
-
-                // Meta (optional — will stay "-" if missing)
-                document.getElementById("cardID").textContent = card.id || "-";
-                document.getElementById("cardRarity").textContent = card.Rarity || "-";
-                document.getElementById("cardSet").textContent = card.Expansion || "-";
-                document.getElementById("cardUnique").textContent = card.Unique || "-";
-
-                // Flavor (if exists)
-                const flavor = document.querySelector(".card-flavor-text");
-                if (flavor) {
-                    flavor.textContent = card.Flav || "";
-                }
-            }
-
-            loadCard();
-            </script>
+        </div><!-- /cardContent -->
     </main>
 
 <script>
-function updateNavButton() {
-    const button = document.getElementById("navAccountButton");
-    const username = sessionStorage.getItem("username");
-
-    if (!button) return;
-
-    if (username) {
-        button.textContent = "My Account";
-    } else {
-        button.textContent = "Login";
-    }
+function escapeHtml(v) {
+    if (v == null) return '';
+    return String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+function clean(v) {
+    const s = String(v ?? '').trim();
+    return (s === '' || s === 'nan' || s === 'None') ? '' : s;
 }
 
-function handleNavAccount() {
-    const username = sessionStorage.getItem("username");
-
-    if (username) {
-        window.location.href = "Account.html";
-    } else {
-        window.location.href = "Login.html";
+/* ==========================================================================
+   Load card — tries sessionStorage first, falls back to re-fetching by title
+   from the URL ?card= parameter. This makes the page work even when the
+   browser has a stale cached version that clears sessionStorage.
+========================================================================== */
+async function loadCard() {
+    // --- Fast path: sessionStorage ---
+    const stored = sessionStorage.getItem("selectedCard");
+    if (stored) {
+        try {
+            populateCard(JSON.parse(stored));
+            return;
+        } catch (e) {
+            console.warn("sessionStorage parse failed, trying URL fallback", e);
+        }
     }
-}
 
-// Run when page loads
-window.addEventListener("DOMContentLoaded", updateNavButton);
-</script>
-
-<script>
-async function loadDeckOptions() {
-    const username = sessionStorage.getItem("username");
-    const deckSelect = document.getElementById("deckSelect");
-
-    if (!username) {
-        deckSelect.innerHTML = '<option value="">Log in to use decks</option>';
+    // --- Fallback: re-fetch by title from URL param ---
+    const params = new URLSearchParams(window.location.search);
+    const cardTitle = params.get("card");
+    if (!cardTitle) {
+        document.getElementById("cardContent").style.display = "none";
+        document.getElementById("cardNotFound").classList.remove("hidden");
         return;
     }
 
-    const response = await fetch("/user-decks", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: username })
+    try {
+        const resp = await fetch("/search", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ Subtype: [], Cost: "", Pow: "", Bod: "", Res: "",
+                                   keywordSearch: decodeURIComponent(cardTitle) })
+        });
+        const data = await resp.json();
+        const cards = data.results || [];
+        // Find the exact title match
+        const card = cards.find(c => c.Title === decodeURIComponent(cardTitle)) || cards[0];
+        if (!card) {
+            document.getElementById("cardContent").style.display = "none";
+            document.getElementById("cardNotFound").classList.remove("hidden");
+            return;
+        }
+        sessionStorage.setItem("selectedCard", JSON.stringify(card)); // cache for next time
+        populateCard(card);
+    } catch (e) {
+        document.getElementById("cardContent").style.display = "none";
+        document.getElementById("cardNotFound").classList.remove("hidden");
+    }
+}
+
+function populateCard(card) {
+
+    // Title
+    document.querySelector(".card-name").textContent = clean(card.Title) || "Unknown Card";
+    document.title = "Shadowfist — " + (clean(card.Title) || 'Card');
+
+    // Subtype above title
+    document.querySelector(".card-subtype").textContent = clean(card.Subtype) || '';
+
+    // Chips: Designator (card type), Keyword
+    const chips = document.querySelector(".card-chips");
+    chips.innerHTML = '';
+    const chipValues = [clean(card.Designator), clean(card.Keyword)].filter(Boolean);
+    chipValues.forEach(val => {
+        const chip = document.createElement("span");
+        chip.className = "inline-block px-3 py-1 font-heading text-[0.6rem] tracking-[0.18em] uppercase text-sf-paper bg-sf-crimson/20 border border-sf-gold/40";
+        chip.textContent = val;
+        chips.appendChild(chip);
     });
 
-    const data = await response.json();
-    deckSelect.innerHTML = '<option value="">Select a deck</option>';
+    // Stats
+    document.getElementById("cardCost").textContent  = clean(card.Cost)  || '—';
+    document.getElementById("cardPower").textContent = clean(card.Pow)   || '—';
+    document.getElementById("cardBod").textContent   = clean(card.Bod)   || '—';
+    document.getElementById("cardRes").textContent   = clean(card.Res)   || '—';
 
-    if (!data.decks || Object.keys(data.decks).length === 0) {
-        deckSelect.innerHTML = '<option value="">No decks found</option>';
-        return;
+    // Meta
+    document.getElementById("cardSet").textContent    = clean(card.Expansion) || '—';
+    document.getElementById("cardRarity").textContent = clean(card.Rarity)    || '—';
+    document.getElementById("cardUnique").textContent = clean(card.Unique)    || (clean(card.Keyword) ? 'See keywords' : '—');
+    document.getElementById("cardArtist").textContent = clean(card.Artist)    || '—';
+
+    // Flavor text
+    const flavorText = clean(card.Tag) || clean(card.Flav) || '';
+    const flavorEl = document.querySelector(".card-flavor-text");
+    if (flavorText) {
+        flavorEl.textContent = '"' + flavorText + '"';
+        flavorEl.classList.remove("hidden");
     }
 
-    for (const deckName in data.decks) {
-        const option = document.createElement("option");
-        option.value = deckName;
-        option.textContent = deckName;
-        deckSelect.appendChild(option);
+    // Card text (rules + keywords)
+    const notesBox = document.getElementById("cardNotes");
+    const rulesText = clean(card.Text) || '';
+    const kw = clean(card.Keyword) || '';
+
+    let html = '';
+    if (kw) {
+        html += `<p class="font-heading text-[0.65rem] tracking-[0.2em] uppercase text-sf-gold">${escapeHtml(kw)}</p>`;
+    }
+    if (rulesText) {
+        html += `<p class="text-sf-parchment leading-relaxed text-base">${escapeHtml(rulesText)}</p>`;
+    }
+    notesBox.innerHTML = html || '<p class="text-sf-parchment-2 italic text-sm">No card text available.</p>';
+}
+
+// Run on page load
+document.addEventListener("DOMContentLoaded", loadCard);
+
+/* ==========================================================================
+   Nav
+========================================================================== */
+function updateNavButton() {
+    const btn = document.getElementById("navAccountButton");
+    if (btn) btn.textContent = sessionStorage.getItem("username") ? "My Account" : "Login";
+}
+function handleNavAccount() {
+    window.location.href = sessionStorage.getItem("username") ? "Account.html" : "Login.html";
+}
+window.addEventListener("DOMContentLoaded", updateNavButton);
+
+/* ==========================================================================
+   Deck options
+========================================================================== */
+async function loadDeckOptions() {
+    const username = sessionStorage.getItem("username");
+    const sel = document.getElementById("deckSelect");
+    if (!username) {
+        sel.innerHTML = '<option value="">Log in to use decks</option>';
+        return;
+    }
+    try {
+        const r = await fetch("/user-decks", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username })
+        });
+        const data = await r.json();
+        sel.innerHTML = '<option value="">Select a deck…</option>';
+        for (const n in (data.decks || {})) {
+            const opt = document.createElement("option");
+            opt.value = n; opt.textContent = n;
+            sel.appendChild(opt);
+        }
+        if (!data.decks || !Object.keys(data.decks).length)
+            sel.innerHTML = '<option value="">No decks — create one in Account</option>';
+    } catch {
+        sel.innerHTML = '<option value="">Cannot reach server</option>';
     }
 }
 
 async function addCurrentCardToDeck() {
     const username = sessionStorage.getItem("username");
     const deckName = document.getElementById("deckSelect").value;
-    const messageBox = document.getElementById("deckMessage");
+    const msg = document.getElementById("deckMessage");
+    const setMsg = (text, ok) => {
+        msg.textContent = text;
+        msg.className = "text-xs italic min-h-[1.1rem] " + (ok ? "text-sf-gold-bright" : "text-sf-ember");
+    };
+    if (!username) return setMsg("Log in to add cards to a deck.", false);
+    if (!deckName) return setMsg("Select a deck first.", false);
 
-    if (!username) {
-        messageBox.textContent = "You must log in before adding cards to a deck.";
-        return;
+    const card = JSON.parse(sessionStorage.getItem("selectedCard") || "{}");
+    try {
+        const r = await fetch("/add-card", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, deckName,
+                cardID: card.id || card.Title || "unknown",
+                cardName: card.Title || "Unknown" })
+        });
+        const data = await r.json();
+        setMsg(data.message, data.status === "success");
+    } catch {
+        setMsg("Cannot reach the server.", false);
     }
-
-    if (!deckName) {
-        messageBox.textContent = "Select a deck first.";
-        return;
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    const cardID = params.get("id") || document.getElementById("cardID").textContent || "placeholder001";
-
-    const card = JSON.parse(sessionStorage.getItem("selectedCard"));
-
-    const response = await fetch("/add-card", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            username: username,
-            deckName: deckName,
-            cardID: card.id,
-            cardName: card.Title
-        })
-    });
-
-    const data = await response.json();
-    messageBox.textContent = data.message;
 }
 
 window.addEventListener("DOMContentLoaded", loadDeckOptions);
@@ -237,4 +359,3 @@ window.addEventListener("DOMContentLoaded", loadDeckOptions);
 
 </body>
 </html>
-

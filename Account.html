@@ -3,264 +3,468 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Shadowfist Account</title>
+    <title>Shadowfist — My Account</title>
     <link rel="stylesheet" href="Styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: { extend: {
+            colors: {
+                'sf-void': '#0a0707', 'sf-ink': '#140b0b', 'sf-ink-2': '#1f1212',
+                'sf-paper': '#ede1c4', 'sf-parchment': '#d9c79a', 'sf-parchment-2': '#b8a373',
+                'sf-blood': '#7a1418', 'sf-crimson': '#b21e23', 'sf-ember': '#e04b2a',
+                'sf-gold-dark': '#6e5522', 'sf-gold': '#b08a3e', 'sf-gold-bright': '#e8c170',
+            },
+            fontFamily: {
+                'display': ['"Cinzel Decorative"', 'serif'],
+                'heading': ['Cinzel', 'serif'],
+                'body': ['"Cormorant Garamond"', 'Georgia', 'serif'],
+                'hanzi': ['"Noto Serif SC"', 'serif'],
+            },
+            boxShadow: {
+                'sf': '0 6px 22px rgba(0,0,0,0.65)',
+                'sf-deep': '0 14px 38px rgba(0,0,0,0.8)',
+                'sf-glow-gold': '0 0 24px rgba(232, 193, 112, 0.18)',
+                'sf-glow-crimson': '0 0 22px rgba(178, 30, 35, 0.35)',
+            },
+            keyframes: { fadeUp: { '0%': { opacity: '0', transform: 'translateY(12px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } },
+            animation: { 'fade-up': 'fadeUp 0.5s ease both' },
+        } }
+    }
+    </script>
+
+    <!-- Themed modal / toast helpers -->
+    <script>
+    (function () {
+        if (window.sfAlert) return;
+        const css = `
+        .sf-modal-backdrop{position:fixed;inset:0;z-index:9000;background:rgba(10,7,7,.78);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .18s ease}
+        .sf-modal-backdrop.sf-show{opacity:1}
+        .sf-modal{position:relative;width:100%;max-width:460px;background:linear-gradient(180deg,#1f1212,#140b0b);border:1px solid #6e5522;box-shadow:0 14px 38px rgba(0,0,0,.85),0 0 22px rgba(178,30,35,.18);padding:28px 28px 24px;transform:translateY(8px);transition:transform .2s ease;font-family:'Cormorant Garamond',Georgia,serif;color:#ede1c4}
+        .sf-modal::after{content:"";position:absolute;inset:6px;border:1px solid rgba(176,138,62,.3);pointer-events:none}
+        .sf-modal-backdrop.sf-show .sf-modal{transform:translateY(0)}
+        .sf-modal-close{position:absolute;top:8px;right:12px;background:none;border:none;cursor:pointer;color:#b8a373;font-family:'Cinzel',serif;font-size:22px;line-height:1;padding:4px 8px}
+        .sf-modal-close:hover{color:#e8c170}
+        .sf-modal-title{font-family:'Cinzel Decorative',serif;font-weight:900;color:#e8c170;font-size:1.4rem;letter-spacing:.04em;margin:0 0 12px}
+        .sf-modal-body{color:#ede1c4;line-height:1.55;font-size:1.05rem;margin-bottom:22px}
+        .sf-modal-actions{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}
+        .sf-btn{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;padding:10px 22px;border:1px solid #6e5522;cursor:pointer;background:transparent;color:#e8c170;transition:all .15s ease}
+        .sf-btn:hover{border-color:#b08a3e;background:rgba(232,193,112,.08);transform:translateY(-1px)}
+        .sf-btn-primary{background:linear-gradient(180deg,#7a1418,#5a0d10);border-color:#b08a3e;color:#ede1c4}
+        .sf-btn-primary:hover{box-shadow:0 0 22px rgba(178,30,35,.35)}
+        .sf-btn-danger{background:linear-gradient(180deg,#7a1418,#5a0d10);border-color:#e04b2a;color:#ede1c4}
+        .sf-btn-danger:hover{box-shadow:0 0 22px rgba(224,75,42,.4)}
+        .sf-toast-stack{position:fixed;top:20px;right:20px;z-index:9500;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+        .sf-toast{pointer-events:auto;min-width:240px;max-width:360px;padding:12px 36px 12px 16px;background:linear-gradient(180deg,#1f1212,#140b0b);border:1px solid #6e5522;color:#ede1c4;font-family:'Cormorant Garamond',Georgia,serif;font-size:1rem;box-shadow:0 6px 22px rgba(0,0,0,.65);position:relative;transform:translateX(20px);opacity:0;transition:all .25s ease}
+        .sf-toast.sf-show{transform:translateX(0);opacity:1}
+        .sf-toast::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#b08a3e}
+        .sf-toast.sf-error::before,.sf-toast.sf-warning::before{background:#e04b2a}
+        .sf-toast-close{position:absolute;top:4px;right:8px;background:none;border:none;color:#b8a373;font-family:'Cinzel',serif;font-size:16px;cursor:pointer;padding:2px 6px}
+        .sf-toast-title{font-family:'Cinzel',serif;font-weight:600;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:#e8c170;margin-bottom:2px}
+        .sf-toast.sf-error .sf-toast-title,.sf-toast.sf-warning .sf-toast-title{color:#e04b2a}
+        `;
+        const s = document.createElement('style'); s.textContent = css; document.head.appendChild(s);
+
+        function buildModal({ title, message, okText, cancelText, danger, isConfirm }) {
+            return new Promise(resolve => {
+                const backdrop = document.createElement('div');
+                backdrop.className = 'sf-modal-backdrop';
+                backdrop.setAttribute('role', 'dialog');
+                backdrop.setAttribute('aria-modal', 'true');
+                const modal = document.createElement('div'); modal.className = 'sf-modal';
+                const closeBtn = document.createElement('button'); closeBtn.className = 'sf-modal-close'; closeBtn.innerHTML = '&times;';
+                const titleEl = document.createElement('h2'); titleEl.className = 'sf-modal-title'; titleEl.textContent = title || (isConfirm ? 'Confirm' : 'Notice');
+                const bodyEl = document.createElement('div'); bodyEl.className = 'sf-modal-body'; bodyEl.textContent = message;
+                const actions = document.createElement('div'); actions.className = 'sf-modal-actions';
+                if (isConfirm) {
+                    const cancel = document.createElement('button'); cancel.className = 'sf-btn'; cancel.textContent = cancelText || 'Cancel';
+                    cancel.addEventListener('click', () => close(false)); actions.appendChild(cancel);
+                }
+                const ok = document.createElement('button'); ok.className = 'sf-btn ' + (danger ? 'sf-btn-danger' : 'sf-btn-primary');
+                ok.textContent = okText || 'OK'; ok.addEventListener('click', () => close(true)); actions.appendChild(ok);
+                modal.appendChild(closeBtn); modal.appendChild(titleEl); modal.appendChild(bodyEl); modal.appendChild(actions);
+                backdrop.appendChild(modal); document.body.appendChild(backdrop);
+                requestAnimationFrame(() => backdrop.classList.add('sf-show'));
+                setTimeout(() => ok.focus(), 50);
+                function close(value) {
+                    backdrop.classList.remove('sf-show'); document.removeEventListener('keydown', onKey);
+                    setTimeout(() => { backdrop.remove(); resolve(isConfirm ? !!value : undefined); }, 180);
+                }
+                function onKey(e) { if (e.key === 'Escape') { e.preventDefault(); close(false); } else if (e.key === 'Enter') { e.preventDefault(); close(true); } }
+                document.addEventListener('keydown', onKey);
+                closeBtn.addEventListener('click', () => close(false));
+                backdrop.addEventListener('click', e => { if (e.target === backdrop) close(false); });
+            });
+        }
+        window.sfAlert   = (msg, title) => buildModal({ title, message: msg, isConfirm: false });
+        window.sfConfirm = (msg, title, opts) => buildModal({ title, message: msg, okText: (opts||{}).okText, cancelText: (opts||{}).cancelText, danger: (opts||{}).danger, isConfirm: true });
+
+        function ensureStack() {
+            let s = document.getElementById('sf-toast-stack');
+            if (!s) { s = document.createElement('div'); s.id = 'sf-toast-stack'; s.className = 'sf-toast-stack'; document.body.appendChild(s); }
+            return s;
+        }
+        window.sfToast = function(message, type, duration) {
+            type = type || 'info'; duration = duration || 3200;
+            const stack = ensureStack();
+            const toast = document.createElement('div'); toast.className = 'sf-toast sf-' + type;
+            const title = document.createElement('div'); title.className = 'sf-toast-title';
+            title.textContent = ({success:'Success',error:'Error',warning:'Warning',info:'Notice'})[type] || 'Notice';
+            const body = document.createElement('div'); body.textContent = message;
+            const closeBtn = document.createElement('button'); closeBtn.className = 'sf-toast-close'; closeBtn.innerHTML = '&times;';
+            toast.appendChild(title); toast.appendChild(body); toast.appendChild(closeBtn);
+            stack.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('sf-show'));
+            let timer = setTimeout(dismiss, duration);
+            function dismiss() { clearTimeout(timer); toast.classList.remove('sf-show'); setTimeout(() => toast.remove(), 280); }
+            closeBtn.addEventListener('click', dismiss);
+        };
+    })();
+    </script>
 </head>
-<body class="page-shell">
-    <main class="page-frame account-page">
-        <section class="panel-box">
-            <div class="panel-header">
-                <p class="eyebrow">Shadowfist Database</p>
-                <h1>My Account</h1>
-                <p class="panel-subtext">View your saved decks, create a new one, or manage existing lists.</p>
-            </div>
+<body class="font-body text-sf-paper">
 
-            <section class="account-summary">
-                <div class="summary-card">
-                    <h2>Profile</h2>
-                    <p><strong>Username:</strong> <span id="accountUsername">Loading...</span></p>
-                    <p><strong>Decks Saved:</strong> #</p>
-                    <p><strong>Last Updated:</strong> (insert time since last update in days)</p>
+    <!-- NAV -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-sf-void/85 border-b border-sf-gold-dark/40">
+        <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+            <a href="Search.html" class="flex items-center gap-3">
+                <span class="font-hanzi text-sf-crimson text-xl tracking-[0.3em]">影&nbsp;拳</span>
+                <span class="font-display font-black text-sf-gold-bright tracking-[0.22em] text-base hidden sm:inline">SHADOWFIST DATABASE</span>
+            </a>
+            <nav class="flex items-center gap-4 font-heading text-xs tracking-[0.22em] uppercase">
+                <a href="Search.html" class="text-sf-parchment hover:text-sf-gold-bright transition">Search</a>
+                <a href="Account.html" class="text-sf-gold-bright">My Account</a>
+                <button type="button" onclick="logoutUser()" class="px-3 py-1.5 border border-sf-gold-dark text-sf-gold-bright hover:border-sf-gold hover:bg-sf-gold-bright/10 transition">Log Out</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+
+        <!-- PROFILE HEADER -->
+        <div class="relative sf-frame overflow-hidden border border-sf-gold-dark shadow-sf-deep mb-8 animate-[fadeUp_0.5s_ease_both]">
+            <div class="absolute inset-0 bg-gradient-to-br from-sf-ink-2 via-sf-ink to-sf-void pointer-events-none"></div>
+            <div class="absolute top-0 right-0 w-80 h-80 rounded-full bg-sf-crimson/8 blur-3xl pointer-events-none"></div>
+            <div class="relative flex flex-wrap items-center gap-6 px-8 py-7">
+                <!-- Avatar initial -->
+                <div class="w-16 h-16 flex items-center justify-center border-2 border-sf-gold bg-sf-void text-sf-gold-bright font-hanzi text-2xl shadow-sf-glow-gold shrink-0">
+                    <span id="accountAvatar">?</span>
                 </div>
+                <div class="flex-1 min-w-0">
+                    <p class="font-hanzi text-sf-crimson text-sm tracking-[0.4em] mb-0.5 opacity-85">歡&nbsp;迎</p>
+                    <h1 class="font-display font-black text-sf-gold-bright text-3xl sm:text-4xl tracking-wide">
+                        <span class="text-sf-parchment-2 font-body italic text-xl mr-1">Welcome,</span>
+                        <span id="accountUsername">—</span>
+                    </h1>
+                </div>
+                <div class="flex gap-8 shrink-0">
+                    <div class="text-center">
+                        <div id="statDecks" class="font-heading font-bold text-sf-gold-bright text-3xl">0</div>
+                        <div class="font-heading text-[0.55rem] tracking-[0.22em] uppercase text-sf-parchment-2">Decks</div>
+                    </div>
+                    <div class="text-center">
+                        <div id="statCards" class="font-heading font-bold text-sf-gold-bright text-3xl">0</div>
+                        <div class="font-heading text-[0.55rem] tracking-[0.22em] uppercase text-sf-parchment-2">Cards</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                <div class="summary-card">
-                    <h2>Quick Actions</h2>
-                    <div class="button-column">
-                        <input type="text" id="deckNameInput" placeholder="Enter deck name">
-                        <button type="button" class="primary-action" onclick="createDeck()">
-                            Create New Deck
-                        </button>
+        <!-- TWO-PANEL LAYOUT -->
+        <div class="grid lg:grid-cols-[320px_1fr] gap-0 border border-sf-gold-dark shadow-sf animate-[fadeUp_0.5s_ease_both]" style="animation-delay:0.07s;">
 
-                        <button type="button" class="danger-action" onclick="deleteSelectedDeck()">
-                            Delete Selected Deck
+            <!-- =========== LEFT PANEL: deck list + creator =========== -->
+            <div class="border-b lg:border-b-0 lg:border-r border-sf-gold-dark bg-sf-ink-2/90 flex flex-col">
+
+                <!-- Create deck form -->
+                <div class="p-5 border-b border-sf-gold-dark/60">
+                    <h2 class="font-heading text-[0.6rem] tracking-[0.28em] uppercase text-sf-gold mb-3">New Deck</h2>
+                    <div class="flex gap-2">
+                        <input type="text" id="deckNameInput" placeholder="Deck name…"
+                               onkeydown="if(event.key==='Enter') createDeck()"
+                               class="flex-1 min-w-0 bg-sf-void border border-sf-gold-dark text-sf-paper placeholder-sf-paper/30 px-3 py-2 text-sm focus:outline-none focus:border-sf-crimson transition italic">
+                        <button type="button" onclick="createDeck()"
+                                class="px-4 py-2 font-heading text-[0.6rem] tracking-[0.2em] uppercase text-sf-paper bg-gradient-to-b from-sf-blood to-[#5a0d10] border border-sf-gold hover:shadow-sf-glow-crimson transition shrink-0">
+                            Create
                         </button>
                     </div>
                 </div>
-            </section>
 
-            <section class="deck-library">
-                <h2>Your Decks</h2>
-                <div class="deck-list" id="deckList">
-                    <p>No decks loaded yet.</p>
-                </div>
-            </section>
-
-            <section class="deck-preview">
-                <h2>Selected Deck Preview</h2>
-
-                <div class="deck-preview-actions">
-                    <button type="button" class="primary-action" onclick="location.href='Search.html'">
-                        Add Card
-                    </button>
-
-                    <button type="button" class="danger-action" onclick="removeSelectedCardFromDeck()">
-                        Remove Selected Card
-                    </button>
+                <!-- Deck list -->
+                <div class="flex-1 overflow-y-auto" style="max-height: 520px;">
+                    <div class="p-3 pb-1">
+                        <p class="font-heading text-[0.55rem] tracking-[0.24em] uppercase text-sf-parchment-2 px-2 mb-1">Your Decks</p>
+                    </div>
+                    <ul id="deckList" class="px-3 pb-3 space-y-1">
+                        <li class="px-3 py-2 text-sf-parchment-2 italic text-sm text-center">Loading…</li>
+                    </ul>
                 </div>
 
-                <div class="info-box" id="deckPreview">
-                    <p>Select a deck to preview its contents.</p>
+                <!-- Footer: go to search -->
+                <div class="p-4 border-t border-sf-gold-dark/60">
+                    <a href="Search.html"
+                       class="flex items-center justify-center gap-2 w-full px-4 py-2.5 font-heading text-[0.6rem] tracking-[0.24em] uppercase text-sf-gold-bright border border-sf-gold-dark hover:border-sf-gold hover:bg-sf-gold-bright/10 transition">
+                        Browse Cards to Add
+                    </a>
                 </div>
-            </section>
-
-            <div class="button-row spaced-row">
-                <button type="button" class="secondary-action" onclick="location.href='Search.html'">Go to Search</button>
-                <button type="button" class="secondary-action" onclick="logoutUser()">Log Out</button>
             </div>
-        </section>
+
+            <!-- =========== RIGHT PANEL: selected deck =========== -->
+            <div class="bg-sf-ink/80 flex flex-col min-h-[480px]">
+
+                <!-- Deck header -->
+                <div class="flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-b border-sf-gold-dark/60">
+                    <div>
+                        <p id="selectedDeckHint" class="font-heading text-[0.55rem] tracking-[0.24em] uppercase text-sf-parchment-2">No deck selected</p>
+                        <h2 id="selectedDeckTitle" class="font-heading text-sf-gold-bright text-lg tracking-wide mt-0.5">Select a deck →</h2>
+                    </div>
+                    <button id="deleteDeckBtn" type="button" onclick="deleteSelectedDeck()"
+                            class="hidden px-4 py-2 font-heading text-[0.6rem] tracking-[0.2em] uppercase text-sf-ember border border-sf-ember/40 hover:bg-sf-ember/10 hover:border-sf-ember transition">
+                        Delete Deck
+                    </button>
+                </div>
+
+                <!-- Card list -->
+                <div id="deckPreview" class="flex-1 p-6">
+                    <p class="text-sf-parchment-2 italic text-center py-12">Select a deck on the left to see its cards.</p>
+                </div>
+            </div>
+        </div>
     </main>
 
 <script>
 let selectedDeckName = null;
-let selectedCardID = null;
+let selectedCardID   = null;
+let _currentDecks    = {};
 
-function getCurrentUsername() {
-    return sessionStorage.getItem("username");
-}
+function getCurrentUsername() { return sessionStorage.getItem("username"); }
 
-function requireLogin() {
-    const username = getCurrentUsername();
-
-    if (!username) {
-        alert("You must log in before managing decks.");
+async function requireLogin() {
+    const u = getCurrentUsername();
+    if (!u) {
+        await sfAlert("You must be logged in to manage decks.", "Login required");
         window.location.href = "Login.html";
         return null;
     }
-
-    return username;
+    return u;
 }
 
-async function createDeck() {
-    const username = requireLogin();
+function escapeHtml(v) {
+    return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+/* ======================================================
+   DECK LIST
+====================================================== */
+async function loadDecks() {
+    const username = getCurrentUsername();
     if (!username) return;
 
-    const deckName = document.getElementById("deckNameInput").value.trim();
+    try {
+        const r = await fetch("/user-decks", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username })
+        });
+        const data = await r.json();
+        _currentDecks = data.decks || {};
 
-    const response = await fetch("/create-deck", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            username: username,
-            deckName: deckName
-        })
-    });
+        // Update stats
+        const names = Object.keys(_currentDecks);
+        let totalCards = 0;
+        names.forEach(n => totalCards += _currentDecks[n].length);
+        document.getElementById("statDecks").textContent = names.length;
+        document.getElementById("statCards").textContent = totalCards;
 
-    const data = await response.json();
-    alert(data.message);
+        // Render deck list
+        const ul = document.getElementById("deckList");
+        if (!names.length) {
+            ul.innerHTML = '<li class="px-3 py-3 text-sf-parchment-2 italic text-sm text-center">No decks yet. Create one above.</li>';
+            return;
+        }
+        ul.innerHTML = names.map(name => {
+            const cards = _currentDecks[name];
+            const isSelected = name === selectedDeckName;
+            return `<li>
+                <button type="button" onclick="selectDeck('${escapeHtml(name).replace(/'/g,"&#039;")}')"
+                        class="deck-btn w-full text-left px-3 py-3 transition group
+                               ${isSelected ? 'bg-sf-crimson/15 border-l-2 border-sf-crimson' : 'hover:bg-sf-gold-bright/5 border-l-2 border-transparent'}">
+                    <div class="font-heading text-sm tracking-wide ${isSelected ? 'text-sf-gold-bright' : 'text-sf-parchment'} truncate">${escapeHtml(name)}</div>
+                    <div class="font-body italic text-xs text-sf-parchment-2 mt-0.5">${cards.length} card${cards.length === 1 ? '' : 's'}</div>
+                </button>
+            </li>`;
+        }).join('');
 
-    if (data.status === "success") {
-        document.getElementById("deckNameInput").value = "";
-        loadDecks();
+        // If a deck was selected, re-render the right panel with fresh data
+        if (selectedDeckName && _currentDecks[selectedDeckName]) {
+            renderDeckPreview(selectedDeckName, _currentDecks[selectedDeckName]);
+        } else if (selectedDeckName && !_currentDecks[selectedDeckName]) {
+            // Deck was deleted
+            selectedDeckName = null;
+            resetRightPanel();
+        }
+    } catch (e) {
+        sfToast("Cannot reach the server.", "error");
     }
 }
 
-async function loadDecks() {
-    const username = requireLogin();
-    if (!username) return;
+function resetRightPanel() {
+    document.getElementById("selectedDeckHint").textContent = "No deck selected";
+    document.getElementById("selectedDeckTitle").textContent = "Select a deck →";
+    document.getElementById("deleteDeckBtn").classList.add("hidden");
+    document.getElementById("deckPreview").innerHTML =
+        '<p class="text-sf-parchment-2 italic text-center py-12">Select a deck on the left to see its cards.</p>';
+}
 
-    const response = await fetch("/user-decks", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            username: username
-        })
+function selectDeck(deckName) {
+    selectedDeckName = deckName;
+    selectedCardID   = null;
+    const cards = _currentDecks[deckName] || [];
+
+    // Update left panel highlight
+    document.querySelectorAll(".deck-btn").forEach(btn => {
+        const isThis = btn.textContent.trim().startsWith(deckName) || btn.querySelector(".font-heading")?.textContent === deckName;
+        // Re-render is easier; just reload decks visually
     });
+    // Re-render the list to update highlight
+    loadDecks();
 
-    const data = await response.json();
-    const deckList = document.getElementById("deckList");
+    renderDeckPreview(deckName, cards);
+}
 
-    deckList.innerHTML = "";
+function renderDeckPreview(deckName, cards) {
+    document.getElementById("selectedDeckHint").textContent = cards.length + " card" + (cards.length === 1 ? '' : 's');
+    document.getElementById("selectedDeckTitle").textContent = deckName;
+    document.getElementById("deleteDeckBtn").classList.remove("hidden");
 
-    if (!data.decks || Object.keys(data.decks).length === 0) {
-        deckList.innerHTML = "<p>No decks created yet.</p>";
+    const preview = document.getElementById("deckPreview");
+
+    if (!cards.length) {
+        preview.innerHTML = `
+            <div class="text-center py-12">
+                <p class="font-hanzi text-sf-crimson text-4xl opacity-40 mb-3">虛</p>
+                <p class="text-sf-parchment-2 italic mb-4">This deck has no cards yet.</p>
+                <a href="Search.html" class="inline-block px-5 py-2 font-heading text-[0.6rem] tracking-[0.22em] uppercase text-sf-gold-bright border border-sf-gold-dark hover:border-sf-gold hover:bg-sf-gold-bright/10 transition">
+                    Browse Cards
+                </a>
+            </div>`;
         return;
     }
 
-    for (const deckName in data.decks) {
-        const cards = data.decks[deckName];
+    preview.innerHTML = `
+        <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2 list-none p-0 m-0" id="cardGrid">
+            ${cards.map(card => `
+                <li class="preview-card-item group relative flex items-center gap-2 px-3 py-2.5
+                           border border-sf-gold-dark/50 bg-sf-void/40 hover:border-sf-gold/60 hover:bg-sf-gold-bright/5
+                           transition cursor-pointer"
+                    data-id="${escapeHtml(card.card_id)}"
+                    onclick="selectCardInPreview('${escapeHtml(card.card_id).replace(/'/g,"&#039;")}', this)">
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sf-paper text-sm truncate">${escapeHtml(card.name || card.card_id)}</p>
+                        <p class="text-sf-parchment-2 text-xs italic truncate">${escapeHtml(card.card_id)}</p>
+                    </div>
+                    <button type="button"
+                            onclick="event.stopPropagation(); quickRemoveCard('${escapeHtml(card.card_id).replace(/'/g,"&#039;")}')"
+                            class="shrink-0 opacity-0 group-hover:opacity-100 transition text-sf-ember hover:text-sf-crimson px-1 text-lg leading-none"
+                            title="Remove card">×</button>
+                </li>
+            `).join('')}
+        </ul>
+        <div class="mt-4 flex items-center gap-3">
+            <button id="removeCardBtn" type="button" onclick="removeSelectedCardFromDeck()"
+                    class="hidden px-4 py-2 font-heading text-[0.6rem] tracking-[0.2em] uppercase text-sf-ember border border-sf-ember/40 hover:bg-sf-ember/10 hover:border-sf-ember transition">
+                Remove Selected Card
+            </button>
+            <p id="selectedCardHint" class="text-sf-parchment-2 italic text-xs"></p>
+        </div>`;
+}
 
-        const deckCard = document.createElement("article");
-        deckCard.className = "deck-card";
-        deckCard.onclick = () => selectDeck(deckName, cards, deckCard);
+/* ======================================================
+   DECK OPERATIONS
+====================================================== */
+async function createDeck() {
+    const username = await requireLogin(); if (!username) return;
+    const deckName = document.getElementById("deckNameInput").value.trim();
+    try {
+        const r = await fetch("/create-deck", {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, deckName })
+        });
+        const data = await r.json();
+        if (data.status === "success") {
+            document.getElementById("deckNameInput").value = "";
+            sfToast(data.message || "Deck created.", "success");
+            await loadDecks();
+            selectDeck(deckName);
+        } else {
+            sfToast(data.message || "Could not create deck.", "error");
+        }
+    } catch { sfToast("Cannot reach the server.", "error"); }
+}
 
-        deckCard.innerHTML = `
-            <h3>${deckName}</h3>
-            <p>Cards: ${cards.length}</p>
-            <p>Click to select this deck.</p>
-        `;
+async function deleteSelectedDeck() {
+    const username = await requireLogin(); if (!username) return;
+    if (!selectedDeckName) { sfToast("Select a deck first.", "warning"); return; }
 
-        deckList.appendChild(deckCard);
-    }
+    const ok = await sfConfirm(
+        `Delete deck "${selectedDeckName}"? This cannot be undone.`,
+        "Confirm deletion",
+        { okText: "Delete", cancelText: "Cancel", danger: true }
+    );
+    if (!ok) return;
+
+    try {
+        const r = await fetch("/delete-deck", {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, deckName: selectedDeckName })
+        });
+        const data = await r.json();
+        if (data.status === "success") {
+            sfToast(data.message || "Deck deleted.", "success");
+            selectedDeckName = null;
+            resetRightPanel();
+            await loadDecks();
+        } else {
+            sfToast(data.message || "Could not delete deck.", "error");
+        }
+    } catch { sfToast("Cannot reach the server.", "error"); }
 }
 
 function selectCardInPreview(cardID, clickedItem) {
     selectedCardID = cardID;
+    document.querySelectorAll(".preview-card-item").forEach(el => el.classList.remove("border-sf-gold","bg-sf-gold-bright/10"));
+    clickedItem.classList.add("border-sf-gold","bg-sf-gold-bright/10");
 
-    document.querySelectorAll(".preview-card-item").forEach(item => {
-        item.classList.remove("selected-preview-card");
-    });
-
-    clickedItem.classList.add("selected-preview-card");
+    const hint = document.getElementById("selectedCardHint");
+    const btn  = document.getElementById("removeCardBtn");
+    if (hint) hint.textContent = "Selected: " + cardID;
+    if (btn)  btn.classList.remove("hidden");
 }
 
-function selectDeck(deckName, cards, clickedCard) {
-    selectedDeckName = deckName;
-    selectedCardID = null;
-
-    document.querySelectorAll(".deck-card").forEach(card => {
-        card.classList.remove("selected");
-    });
-
-    clickedCard.classList.add("selected");
-
-    const deckPreview = document.getElementById("deckPreview");
-
-    if (cards.length === 0) {
-        deckPreview.innerHTML = `
-            <p><strong>Deck Name:</strong> ${deckName}</p>
-            <p><strong>Cards:</strong> No cards added yet.</p>
-        `;
-        return;
-    }
-
-    deckPreview.innerHTML = `
-        <p><strong>Deck Name:</strong> ${deckName}</p>
-        <p><strong>Cards:</strong></p>
-        <ul class="preview-card-list">
-            ${cards.map(card => `
-                <li class="preview-card-item" onclick="selectCardInPreview('${card.card_id}', this)">
-                    ${card.name || card.card_id}
-                </li>
-            `).join("")}
-        </ul>
-    `;
-}
-
-async function deleteSelectedDeck() {
-    const username = requireLogin();
-    if (!username) return;
-
-    if (!selectedDeckName) {
-        alert("Select a deck before deleting.");
-        return;
-    }
-
-    const confirmDelete = confirm(`Delete deck "${selectedDeckName}"?`);
-    if (!confirmDelete) return;
-
-    const response = await fetch("/delete-deck", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            username: username,
-            deckName: selectedDeckName
-        })
-    });
-
-    const data = await response.json();
-    alert(data.message);
-
-    if (data.status === "success") {
-        selectedDeckName = null;
-        document.getElementById("deckPreview").innerHTML = "<p>Select a deck to preview its contents.</p>";
-        loadDecks();
-    }
+async function quickRemoveCard(cardID) {
+    const username = getCurrentUsername();
+    if (!username || !selectedDeckName) return;
+    try {
+        const r = await fetch("/remove-card", {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, deckName: selectedDeckName, cardID })
+        });
+        const data = await r.json();
+        if (data.status === "success") {
+            sfToast("Card removed.", "success");
+            selectedCardID = null;
+            await loadDecks();
+        } else {
+            sfToast(data.message || "Could not remove card.", "error");
+        }
+    } catch { sfToast("Cannot reach the server.", "error"); }
 }
 
 async function removeSelectedCardFromDeck() {
-    const username = requireLogin();
-    if (!username) return;
-
-    if (!selectedDeckName) {
-        alert("Select a deck first.");
-        return;
-    }
-
-    if (!selectedCardID) {
-        alert("Select a card from the deck preview before removing.");
-        return;
-    }
-
-    const response = await fetch("/remove-card", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            username: username,
-            deckName: selectedDeckName,
-            cardID: selectedCardID
-        })
-    });
-
-    const data = await response.json();
-    alert(data.message);
-
-    if (data.status === "success") {
-        selectedCardID = null;
-
-        document.getElementById("deckPreview").innerHTML = "<p>Select a deck to preview its contents.</p>";
-
-        await loadDecks();
-    }
+    const username = await requireLogin(); if (!username) return;
+    if (!selectedDeckName) { sfToast("Select a deck first.", "warning"); return; }
+    if (!selectedCardID)   { sfToast("Select a card first.", "warning"); return; }
+    await quickRemoveCard(selectedCardID);
 }
 
 function logoutUser() {
@@ -268,12 +472,19 @@ function logoutUser() {
     window.location.href = "Login.html";
 }
 
-window.onload = function() {
-    const username = requireLogin();
-    if (!username) return;
-
+/* ======================================================
+   INIT
+====================================================== */
+window.onload = async function () {
+    const username = getCurrentUsername();
+    if (!username) {
+        await sfAlert("You must be logged in to view this page.", "Login required");
+        window.location.href = "Login.html";
+        return;
+    }
     document.getElementById("accountUsername").textContent = username;
-    loadDecks();
+    document.getElementById("accountAvatar").textContent = (username[0] || "?").toUpperCase();
+    await loadDecks();
 };
 </script>
 

@@ -3,29 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shadowfist card</title>
+    <title>Shadowfist — Card Archive</title>
     <link rel="stylesheet" href="Styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: { extend: {
+            colors: {
+                'sf-void': '#0a0707', 'sf-ink': '#140b0b', 'sf-ink-2': '#1f1212',
+                'sf-paper': '#ede1c4', 'sf-parchment': '#d9c79a', 'sf-parchment-2': '#b8a373',
+                'sf-blood': '#7a1418', 'sf-crimson': '#b21e23', 'sf-ember': '#e04b2a',
+                'sf-gold-dark': '#6e5522', 'sf-gold': '#b08a3e', 'sf-gold-bright': '#e8c170',
+            },
+            fontFamily: {
+                'display': ['"Cinzel Decorative"', 'serif'],
+                'heading': ['Cinzel', 'serif'],
+                'body': ['"Cormorant Garamond"', 'Georgia', 'serif'],
+                'hanzi': ['"Noto Serif SC"', 'serif'],
+            },
+            boxShadow: {
+                'sf': '0 6px 22px rgba(0,0,0,0.65)',
+                'sf-deep': '0 14px 38px rgba(0,0,0,0.8)',
+                'sf-glow-gold': '0 0 24px rgba(232, 193, 112, 0.18)',
+                'sf-glow-crimson': '0 0 22px rgba(178, 30, 35, 0.35)',
+            },
+            keyframes: { fadeUp: { '0%': { opacity: '0', transform: 'translateY(12px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } },
+            animation: { 'fade-up': 'fadeUp 0.5s ease both' },
+        } }
+    }
+    </script>
 </head>
-<body>
-    
-    <!-- Navigation Bar -->
-    <header class="top-nav">
-        <div class="nav-title">Shadowfist Database</div>
-        <div class="nav-actions">
-            <button class="nav-login-btn" id="navAccountButton" onclick="handleNavAccount()">
-                Login
-            </button>
+<body class="font-body text-sf-paper">
+
+    <!-- ==================== TOP NAV ==================== -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-sf-void/85 border-b border-sf-gold-dark/40">
+        <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+            <a href="Search.html" class="flex items-center gap-3">
+                <span class="font-hanzi text-sf-crimson text-xl tracking-[0.3em]">影&nbsp;拳</span>
+                <span class="font-display font-black text-sf-gold-bright tracking-[0.22em] text-base hidden sm:inline">SHADOWFIST DATABASE</span>
+            </a>
+            <nav class="flex items-center gap-1 sm:gap-4 font-heading text-[0.7rem] sm:text-xs tracking-[0.22em] uppercase">
+                <a href="Search.html" class="px-2 py-1 text-sf-gold-bright">Search</a>
+                <button class="px-3 py-1.5 border border-sf-gold-dark text-sf-gold-bright hover:border-sf-gold hover:bg-sf-gold-bright/10 transition" id="navAccountButton" onclick="handleNavAccount()">
+                    Login
+                </button>
+            </nav>
         </div>
     </header>
 
-    <h1 style="margin-bottom: 100px; ">Shadowfist card</h1>
+    <!-- ==================== STICKY FILTER BAR ==================== -->
+    <div class="sticky top-[57px] z-40 backdrop-blur-md bg-sf-ink/90 border-b border-sf-gold-dark/40 shadow-sf">
+        <div class="max-w-7xl mx-auto px-6 py-3">
 
- <div class="filter-row">
+            <div class="flex flex-wrap items-center gap-3">
+                <label for="keywordSearch" class="font-heading text-[0.7rem] tracking-[0.22em] uppercase text-sf-parchment-2 hidden sm:block">Search</label>
+                <input type="text" id="keywordSearch" placeholder="Search by name or text..."
+                       onkeydown="if(event.key==='Enter') submitFilters()"
+                       class="flex-1 min-w-[180px] bg-sf-void border border-sf-gold-dark text-sf-paper placeholder-sf-paper/35 px-3 py-2 focus:outline-none focus:border-sf-crimson focus:shadow-sf-glow-crimson transition italic">
 
-   <label for="Subtype" style="font-weight: bold;  margin-left: 300px; font-size: 26px;">Subtypes:</label>
-            <select name="Subtype" id="Subtype" multiple>
-                                
+                <button type="button" onclick="toggleFilters()"
+                        class="inline-flex items-center gap-2 px-4 py-2 font-heading text-[0.7rem] tracking-[0.22em] uppercase text-sf-gold-bright border border-sf-gold-dark hover:border-sf-gold hover:bg-sf-gold-bright/10 transition">
+                    <span>Filters</span>
+                    <span id="activeFilterCount" class="hidden inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-sf-crimson text-sf-paper text-[0.6rem] font-bold">0</span>
+                    <svg id="filterChevron" class="w-3 h-3 transition-transform rotate-180" viewBox="0 0 12 12" fill="currentColor"><path d="M6 8L2 4h8z"/></svg>
+                </button>
 
+                <button type="button" onclick="submitFilters()" id="submitButton"
+                        class="inline-flex items-center justify-center px-6 py-2 font-heading text-xs tracking-[0.28em] uppercase text-sf-paper bg-gradient-to-b from-sf-blood to-[#5a0d10] border border-sf-gold hover:shadow-sf-glow-crimson transition shadow-sf">
+                    Seek
+                </button>
+
+                <button type="button" onclick="clearAllFilters()" id="clearBtn"
+                        class="hidden items-center px-3 py-2 font-heading text-[0.65rem] tracking-[0.22em] uppercase text-sf-parchment-2 hover:text-sf-ember transition">
+                    Clear
+                </button>
+            </div>
+
+            <div id="filterPanel" class="overflow-hidden transition-all duration-300 ease-out" style="max-height: 0;"
+                 onkeydown="if(event.key==='Enter' && event.target.tagName==='INPUT') submitFilters()">
+                <div class="pt-5 pb-2 grid lg:grid-cols-[2fr_1fr] gap-6">
+
+                    <div>
+                        <label for="Subtype" class="block font-heading text-[0.7rem] tracking-[0.22em] uppercase text-sf-parchment-2 mb-2">
+                            Subtypes <span class="text-sf-parchment-2/60 italic normal-case tracking-normal text-[0.7rem] ml-1">(hold Ctrl / ⌘ to select multiple)</span>
+                        </label>
+                        <select name="Subtype" id="Subtype" multiple size="8"
+                                class="w-full bg-sf-void border border-sf-gold-dark text-sf-paper p-1.5 focus:outline-none focus:border-sf-crimson">
                             <option value="Feng Shui Site">Feng Shui Sites</option>
                             <option value="Unaligned Character">Unaligned Characters</option>
                             <option value="Unaligned Site">Unaligned Sites</option>
@@ -73,166 +136,374 @@
                             <option value="Jammer Events">Jammer Events</option>
                             <option value="Jammer States">Jammer States</option>
                             <option value="Jammer Edges">Jammer Edges</option>
+                        </select>
+                    </div>
 
+                    <div>
+                        <p class="block font-heading text-[0.7rem] tracking-[0.22em] uppercase text-sf-parchment-2 mb-1">Stats</p>
+                        <p class="text-xs italic text-sf-parchment-2/70 mb-3 leading-snug">
+                            Match the value as it appears on a card &mdash; usually a number (most cards are 0&ndash;7) but special values like X are possible. Leave blank to ignore.
+                        </p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label for="Cost" class="block font-heading text-[0.65rem] tracking-[0.18em] uppercase text-sf-parchment-2 mb-1">Cost</label>
+                                <input type="text" id="Cost" placeholder="e.g. 3" name="set1"
+                                       class="w-full bg-sf-void border border-sf-gold-dark text-sf-paper placeholder-sf-paper/35 px-3 py-2 focus:outline-none focus:border-sf-crimson focus:shadow-sf-glow-crimson transition italic">
+                            </div>
+                            <div>
+                                <label for="Pow" class="block font-heading text-[0.65rem] tracking-[0.18em] uppercase text-sf-parchment-2 mb-1">Power</label>
+                                <input type="text" id="Pow" placeholder="e.g. 3" name="set2"
+                                       class="w-full bg-sf-void border border-sf-gold-dark text-sf-paper placeholder-sf-paper/35 px-3 py-2 focus:outline-none focus:border-sf-crimson focus:shadow-sf-glow-crimson transition italic">
+                            </div>
+                            <div>
+                                <label for="Bod" class="block font-heading text-[0.65rem] tracking-[0.18em] uppercase text-sf-parchment-2 mb-1">Bod</label>
+                                <input type="text" id="Bod" placeholder="e.g. 3" name="set3"
+                                       class="w-full bg-sf-void border border-sf-gold-dark text-sf-paper placeholder-sf-paper/35 px-3 py-2 focus:outline-none focus:border-sf-crimson focus:shadow-sf-glow-crimson transition italic">
+                            </div>
+                            <div>
+                                <label for="Res" class="block font-heading text-[0.65rem] tracking-[0.18em] uppercase text-sf-parchment-2 mb-1">Res</label>
+                                <input type="text" id="Res" placeholder="e.g. 3" name="set4"
+                                       class="w-full bg-sf-void border border-sf-gold-dark text-sf-paper placeholder-sf-paper/35 px-3 py-2 focus:outline-none focus:border-sf-crimson focus:shadow-sf-glow-crimson transition italic">
+                            </div>
+                        </div>
+                    </div>
 
+                </div>
+            </div>
 
-            </select>
+        </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-6 py-10">
+
+        <!-- Hero -->
+        <div id="searchIntro" class="text-center mb-10 animate-[fadeUp_0.5s_ease_both]">
+            <p class="font-hanzi text-sf-crimson text-2xl sm:text-3xl tracking-[0.5em] mb-3 opacity-85">影&nbsp;&nbsp;拳</p>
+            <h1 class="font-display font-black text-sf-gold-bright text-4xl sm:text-5xl tracking-wide mb-3">The Card Archive</h1>
+            <p class="font-body italic text-sf-parchment-2 text-lg">Hunt cards by faction, subtype, stats, or keyword.</p>
+
+            <div class="flex items-center justify-center gap-3 my-8 max-w-sm mx-auto">
+                <span class="flex-1 h-px bg-gradient-to-r from-transparent via-sf-gold to-transparent opacity-60"></span>
+                <span class="w-2.5 h-2.5 bg-sf-gold rotate-45 shadow-sf-glow-gold"></span>
+                <span class="flex-1 h-px bg-gradient-to-r from-transparent via-sf-gold to-transparent opacity-60"></span>
+            </div>
         </div>
 
+        <!-- BROWSE BY FACTION -->
+        <section id="factionBrowse" class="mb-12 animate-[fadeUp_0.5s_ease_both]" style="animation-delay:0.05s;">
+            <div class="flex items-end justify-between gap-3 mb-5">
+                <div>
+                    <h2 class="font-heading text-sf-gold tracking-[0.24em] uppercase text-sm">Browse by Faction</h2>
+                    <p class="font-body italic text-sf-parchment-2 text-sm mt-1">Quick-pick a faction to see its cards, or use the bar above for finer control.</p>
+                </div>
+                <button type="button" onclick="loadAllCards()"
+                        class="hidden sm:inline-flex font-heading text-[0.65rem] tracking-[0.22em] uppercase text-sf-parchment hover:text-sf-gold-bright transition">
+                    Show All Cards →
+                </button>
+            </div>
 
+            <div id="factionGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"></div>
 
-<p style="font-family: Verdana, sans-serif;  margin-left: 300px; color: rgb(231, 110, 110); ">If does these powers do not appley, please leave blank</p>
-<div class="filter-row">
-           
-            <label for="Cost" style="font-weight: bold;">Cost:</label>
-            <input type="text" id="Cost" placeholder="Cost..." name="set1">
+            <button type="button" onclick="loadAllCards()"
+                    class="sm:hidden mt-4 w-full px-5 py-3 font-heading text-xs tracking-[0.24em] uppercase text-sf-gold-bright border border-sf-gold-dark hover:border-sf-gold hover:bg-sf-gold-bright/10 transition">
+                Show All Cards
+            </button>
+        </section>
 
-             
-            <label for="Pow" style="font-weight: bold;">Power Generated:</label>
-            <input type="text" id="Pow" placeholder="Power Generated..." name="set2">
-
-           <label for="Bod" style="font-weight: bold;">Bod:</label>
-            <input type="text" id="Bod" placeholder="Bod..." name="set3">
-
-
-            <label for="Res" style="font-weight: bold;">Res:</label>
-            <input type="text" id="Res" placeholder="Res..."name="set4">
-            
-               </div>
-    <div class="filter-row">
-            <label for="keywordSearch" style="font-weight: bold; ">Keywords:</label>
-            <input type="text" placeholder="Search..." id="keywordSearch">
-  
-            <button type="button" onclick="submitFilters()" id="submitButton">Submit</button>
-       
-        </div>
-        <section id="results-container" class="filter-container" style="display: none;">
-        <h2>Search Results</h2>
-        <ul id="results-list"></ul>
-    </section>
+        <!-- RESULTS -->
+        <section id="results-container" style="display: none;">
+            <div class="flex flex-wrap items-end justify-between gap-3 mb-6">
+                <div>
+                    <h2 class="font-heading text-sf-gold tracking-[0.24em] uppercase text-sm">Search Results</h2>
+                    <p id="resultsSummary" class="font-body italic text-sf-parchment-2 text-sm mt-1"></p>
+                </div>
+                <span id="resultsCount" class="font-heading text-[0.7rem] tracking-[0.22em] uppercase text-sf-parchment-2"></span>
+            </div>
+            <ul id="results-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 list-none p-0 m-0"></ul>
+        </section>
+    </main>
 
 <script>
-    async function submitFilters() {
-    const resultsContainer = document.getElementById("results-container");
-        const resultsList = document.getElementById("results-list");
+/* ==========================================================================
+   FACTIONS — drive the browse-by-faction grid.
+========================================================================== */
+const FACTIONS = [
+    // Subtype values match the Excel exactly (plural, confirmed from spreadsheet)
+    { name: 'Dragons',             hanzi: '龍', tagline: 'Heroes of the people',            subtypes: ['Dragon Characters','Dragon Sites','Dragon Events','Dragon States','Dragon Edges'] },
+    { name: 'Guiding Hand',        hanzi: '手', tagline: 'Order through tradition',         subtypes: ['Guiding Hand Characters','Guiding Hand Sites','Guiding Hand Events','Guiding Hand States','Guiding Hand Edges'] },
+    { name: 'Eaters of the Lotus', hanzi: '蓮', tagline: 'Sorcery of the imperial past',    subtypes: ['Eaters of the Lotus Characters','Eaters of the Lotus Sites','Eaters of the Lotus Events','Eaters of the Lotus States','Eaters of the Lotus Edges'] },
+    { name: 'Ascended',            hanzi: '昇', tagline: 'Hidden masters of modern men',    subtypes: ['Ascended Characters','Ascended Sites','Ascended Events','Ascended States','Ascended Edges'] },
+    { name: 'Architects of Flesh', hanzi: '肉', tagline: "Engineering tomorrow's warriors", subtypes: ['Architects of the Flesh Characters','Architects of the Flesh Sites','Architects of the Flesh Events','Architects of the Flesh States','Architects of the Flesh Edges'] },
+    { name: 'Four Monarchs',       hanzi: '王', tagline: 'Demons crowned, demons ruling',   subtypes: ['Four Monarchs Characters','Four Monarchs Events','Four Monarchs States','Four Monarchs Edges'] },
+    { name: 'Jammers',             hanzi: '亂', tagline: 'Apes from a future undone',       subtypes: ['Jammer Characters','Jammer Sites','Jammer Events','Jammer States','Jammer Edges'] },
+    { name: 'Unaligned',           hanzi: '客', tagline: 'Wanderers, neutrals, mercenaries', subtypes: ['Unaligned Characters','Unaligned Sites','Unaligned States','Unaligned Edges','Feng Shui Site'] },
+];
 
-        // Show results section
-        resultsContainer.style.display = "block";
-        resultsList.innerHTML = "Loading...";
-        // Collect all filter values (ALL your dropdowns + inputs)
-        const rawFilters = {
-            Subtype: Array.from(document.getElementById("Subtype").selectedOptions).map(o => o.value),
-            Cost: document.getElementById("Cost").value,
-            Pow: document.getElementById("Pow").value,
-            Bod: document.getElementById("Bod").value,
-            Res: document.getElementById("Res").value,
-            keywordSearch: document.getElementById("keywordSearch").value   // ADD THIS
-        };
-    function normalizeValue(v) {
-                if (Array.isArray(v)) return v.join(" ");
-                if (v === null || v === undefined) return "";
-                return String(v);
-                }
-                const normalized = {};
-                for (const k in rawFilters) normalized[k] = normalizeValue(rawFilters[k]);
+function renderFactionGrid() {
+    const grid = document.getElementById('factionGrid');
+    grid.innerHTML = FACTIONS.map((f, i) => `
+        <button type="button" onclick="searchByFaction(${i})"
+                class="group relative text-left p-4 bg-gradient-to-b from-sf-ink-2/95 to-sf-ink/98 border border-sf-gold-dark hover:border-sf-gold hover:shadow-sf-glow-gold hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+            <div class="absolute inset-1 border border-sf-gold/20 pointer-events-none"></div>
+            <div class="relative flex items-start gap-3">
+                <span class="font-hanzi text-sf-crimson text-3xl leading-none opacity-85 group-hover:opacity-100 transition">${f.hanzi}</span>
+                <div class="flex-1 min-w-0">
+                    <div class="font-heading text-sf-gold-bright text-sm tracking-wide truncate">${f.name}</div>
+                    <div class="font-body italic text-sf-parchment-2 text-xs leading-tight mt-0.5">${f.tagline}</div>
+                </div>
+            </div>
+        </button>
+    `).join('');
+}
 
-                // Build payload that includes BOTH:
-                //  - all original (normalized) frontend fields (so you can keep UI behavior), and
-                //  - the exact keys your current backend expects (aliases) so filters work.
-                const filters = Object.assign({}, normalized, {
-                // Backend-friendly aliases (exact keys BackEnd.py currently checks)
-                                    
-                Cost: normalized.Cost || "",                        
-                Pow: normalized.Pow || "",                         
-                Bod: normalized.Bod || "",                    
-                Res: normalized.Res || "",                    
-                Subtype: normalized.Subtype || "",                 // matches CSV "Subtypes"
-                
-            });
+function searchByFaction(index) {
+    const f = FACTIONS[index];
+    if (!f) return;
 
-            console.log("SENDING FILTERS:", filters);
+    clearAllFilters({ silent: true });
+    // Pass subtypes directly — bypass the dropdown, which uses a different
+    // naming scheme from the Excel and only covers a subset of types.
+    submitFilters(f.subtypes);
+    setTimeout(() => {
+        const r = document.getElementById('results-container');
+        if (r) r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+}
 
-        try {
-            const res = await fetch("http://127.0.0.1:5000/search", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(filters)
-            }); 
+function loadAllCards() {
+    clearAllFilters({ silent: true });
+    submitFilters();
+    setTimeout(() => {
+        const r = document.getElementById('results-container');
+        if (r) r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+}
 
-            const data = await res.json();
-            const cards = data.results || [];
+/* ==========================================================================
+   Filter panel
+========================================================================== */
+let _filtersOpen = true;
+function setFilterPanelOpen(open) {
+    _filtersOpen = open;
+    const panel = document.getElementById('filterPanel');
+    const chevron = document.getElementById('filterChevron');
+    if (open) {
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+        chevron.style.transform = 'rotate(180deg)';
+    } else {
+        panel.style.maxHeight = '0';
+        chevron.style.transform = 'rotate(0deg)';
+    }
+}
+function toggleFilters() { setFilterPanelOpen(!_filtersOpen); }
 
-            resultsList.innerHTML = ""; // clear loading text
+function clearAllFilters(opts) {
+    opts = opts || {};
+    document.getElementById('keywordSearch').value = '';
+    document.getElementById('Cost').value = '';
+    document.getElementById('Pow').value  = '';
+    document.getElementById('Bod').value  = '';
+    document.getElementById('Res').value  = '';
+    Array.from(document.getElementById('Subtype').options).forEach(o => o.selected = false);
+    updateActiveFilterBadge();
+    if (!opts.silent) submitFilters();
+}
 
-            if (cards.length === 0) {
-                resultsList.innerHTML = "<li>No results found.</li>";
-                return;
-            }
+function gatherFilters() {
+    // Subtype as array so backend can do OR matching per type instead of
+    // trying to match a concatenated string (which never works with multi-select).
+    const subtypes = Array.from(document.getElementById('Subtype').selectedOptions).map(o => o.value);
+    return {
+        Subtype: subtypes,
+        Cost: document.getElementById('Cost').value.trim(),
+        Pow:  document.getElementById('Pow').value.trim(),
+        Bod:  document.getElementById('Bod').value.trim(),
+        Res:  document.getElementById('Res').value.trim(),
+        keywordSearch: document.getElementById('keywordSearch').value.trim()
+    };
+}
 
-                // Build result list items
-            cards.forEach(card => {
-            const li = document.createElement("li");
+function updateActiveFilterBadge() {
+    const f = gatherFilters();
+    const badge = document.getElementById('activeFilterCount');
+    const clearBtn = document.getElementById('clearBtn');
+    let count = 0;
+    if (Array.isArray(f.Subtype) ? f.Subtype.length > 0 : f.Subtype) count++;
+    if (f.Cost) count++;
+    if (f.Pow) count++;
+    if (f.Bod) count++;
+    if (f.Res) count++;
+    if (f.keywordSearch) count++;
+
+    if (count > 0) {
+        badge.textContent = count;
+        badge.classList.remove('hidden');
+        clearBtn.classList.remove('hidden');
+        clearBtn.classList.add('inline-flex');
+    } else {
+        badge.classList.add('hidden');
+        clearBtn.classList.add('hidden');
+        clearBtn.classList.remove('inline-flex');
+    }
+}
+
+/* ==========================================================================
+   Submit
+========================================================================== */
+async function submitFilters(subtypeOverride) {
+    const resultsContainer = document.getElementById('results-container');
+    const resultsList = document.getElementById('results-list');
+    const factionSection = document.getElementById('factionBrowse');
+    const intro = document.getElementById('searchIntro');
+    const countEl = document.getElementById('resultsCount');
+    const summaryEl = document.getElementById('resultsSummary');
+
+    if (intro) intro.style.display = 'none';   // hide the big hero intro, keep faction grid
+    resultsContainer.style.display = 'block';
+
+    resultsList.innerHTML = Array.from({length: 8}).map(() => `
+        <li class="border border-sf-gold-dark/40 bg-sf-ink-2/60 p-5 animate-pulse">
+            <div class="h-5 bg-sf-gold-dark/30 mb-3"></div>
+            <div class="h-3 bg-sf-gold-dark/20 mb-4 w-2/3"></div>
+            <div class="grid grid-cols-4 gap-1.5"><div class="h-10 bg-sf-gold-dark/20"></div><div class="h-10 bg-sf-gold-dark/20"></div><div class="h-10 bg-sf-gold-dark/20"></div><div class="h-10 bg-sf-gold-dark/20"></div></div>
+        </li>
+    `).join('');
+    countEl.textContent = '';
+    summaryEl.textContent = '';
+
+    // subtypeOverride lets searchByFaction() pass faction subtypes directly
+    const filters = gatherFilters();
+    if (subtypeOverride) filters.Subtype = subtypeOverride;
+    updateActiveFilterBadge();
+    console.log('SENDING FILTERS:', filters);
+
+    try {
+        // Relative URL — same-origin, no host needed
+        const res = await fetch('/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(filters)
+        });
+
+        const data = await res.json();
+        const cards = data.results || [];
+
+        resultsList.innerHTML = '';
+        countEl.textContent = cards.length + (cards.length === 1 ? ' card' : ' cards');
+
+        const summary = [];
+        const subtypeArr = Array.isArray(filters.Subtype) ? filters.Subtype : (filters.Subtype ? [filters.Subtype] : []);
+        if (subtypeArr.length === 1) summary.push('subtype: "' + subtypeArr[0] + '"');
+        else if (subtypeArr.length > 1) summary.push('faction: ' + subtypeArr.length + ' types');
+        if (filters.keywordSearch) summary.push('keyword "' + filters.keywordSearch + '"');
+        ['Cost','Pow','Bod','Res'].forEach(k => { if (filters[k]) summary.push(k + '=' + filters[k]); });
+        summaryEl.textContent = summary.length ? 'Filtering by ' + summary.join(', ') : 'Showing all cards';
+
+        if (cards.length === 0) {
+            const hasFilters = summary.length > 0;
+            resultsList.innerHTML = `
+                <li class="col-span-full text-center py-16">
+                    <p class="font-hanzi text-sf-crimson text-5xl opacity-60 mb-4">空</p>
+                    <p class="font-body italic text-sf-parchment-2 text-lg mb-4">The archive holds no matching cards.</p>
+                    ${hasFilters
+                        ? '<button type="button" onclick="clearAllFilters()" class="px-5 py-2 font-heading text-[0.7rem] tracking-[0.22em] uppercase text-sf-gold-bright border border-sf-gold-dark hover:border-sf-gold hover:bg-sf-gold-bright/10 transition">Clear Filters</button>'
+                        : '<p class="text-sf-parchment-2/60 text-sm">Try browsing by faction above.</p>'}
+                </li>`;
+            return;
+        }
+
+        cards.forEach((card, idx) => {
+            const li = document.createElement('li');
+            li.style.animation = 'sf-fade-up 0.5s ease both';
+            li.style.animationDelay = Math.min(idx * 0.025, 0.4) + 's';
+
+            const title   = escapeHtml(card.Title   || 'Unnamed Card');
+            const subtype = escapeHtml(card.Subtype || '');
+            const cost    = escapeHtml(card.Cost    || '—');
+            const pow     = escapeHtml(card.Pow     || '—');
+            const bod     = escapeHtml(card.Bod     || '—');
+            const resVal  = escapeHtml(card.Res     || '—');
 
             li.innerHTML = `
-                <div class="card-result">
-                    <h3>${card.Title ?? "Unnamed Card"}</h3>
-
-                    <strong>Cost:</strong> ${card.Cost ?? "N/A"}<br>
-                    <strong>Pow:</strong> ${card.Pow ?? "N/A"}<br>
-                    <strong>Bod:</strong> ${card.Bod ?? "N/A"}<br>
-                    <strong>Res:</strong> ${card.Res ?? "N/A"}<br>
-                    <strong>Subtype:</strong> ${card.Subtype ?? "N/A"}<br>
-                    <br>
-
-                    <button class="view-btn">View Card</button>
+                <div class="card-result sf-frame relative h-full p-5 bg-gradient-to-b from-sf-ink-2/95 to-sf-ink/98 border border-sf-gold-dark hover:border-sf-gold hover:shadow-sf-glow-gold hover:-translate-y-1 transition-all duration-200 flex flex-col gap-3 cursor-pointer">
+                    <div class="relative flex flex-col gap-3 h-full">
+                        <h3 class="font-heading text-sf-gold-bright text-lg tracking-wide pb-2 border-b border-sf-gold/25">${title}</h3>
+                        ${subtype ? `<p class="text-sf-parchment-2 italic text-sm -mt-2">${subtype}</p>` : ''}
+                        <div class="grid grid-cols-4 gap-1.5 mt-auto">
+                            <div class="text-center p-1.5 bg-sf-void/60 border border-sf-gold/25"><div class="font-heading text-[0.55rem] tracking-[0.18em] uppercase text-sf-parchment-2">Cost</div><div class="font-heading font-bold text-sf-gold-bright text-base">${cost}</div></div>
+                            <div class="text-center p-1.5 bg-sf-void/60 border border-sf-gold/25"><div class="font-heading text-[0.55rem] tracking-[0.18em] uppercase text-sf-parchment-2">Pow</div><div class="font-heading font-bold text-sf-gold-bright text-base">${pow}</div></div>
+                            <div class="text-center p-1.5 bg-sf-void/60 border border-sf-gold/25"><div class="font-heading text-[0.55rem] tracking-[0.18em] uppercase text-sf-parchment-2">Bod</div><div class="font-heading font-bold text-sf-gold-bright text-base">${bod}</div></div>
+                            <div class="text-center p-1.5 bg-sf-void/60 border border-sf-gold/25"><div class="font-heading text-[0.55rem] tracking-[0.18em] uppercase text-sf-parchment-2">Res</div><div class="font-heading font-bold text-sf-gold-bright text-base">${resVal}</div></div>
+                        </div>
+                        <button class="view-btn mt-1 px-3 py-2 font-heading text-[0.65rem] tracking-[0.22em] uppercase text-sf-paper bg-gradient-to-b from-sf-blood to-[#5a0d10] border border-sf-gold hover:shadow-sf-glow-crimson transition">View Card</button>
+                    </div>
                 </div>
             `;
-            
-            const viewBtn = li.querySelector(".view-btn");
 
-            viewBtn.addEventListener("click", () => {
-                console.log("CLICKED CARD:", card);
-
-                sessionStorage.setItem("selectedCard", JSON.stringify(card));
-                window.location.href = "Result.html";
-            });
+            const card_root = li.querySelector('.card-result');
+            const viewBtn = li.querySelector('.view-btn');
+            const goView = () => {
+                // Store card in sessionStorage (fast path)
+                sessionStorage.setItem('selectedCard', JSON.stringify(card));
+                // Also pass the card title in the URL as a fallback.
+                // This lets Result.html re-fetch the card from the server
+                // if the browser's sessionStorage is empty (e.g. stale cache
+                // served a different Result.html that cleared storage).
+                const param = encodeURIComponent(card.Title || '');
+                window.location.href = 'Result.html?card=' + param;
+            };
+            card_root.addEventListener('click', goView);
+            viewBtn.addEventListener('click', (e) => { e.stopPropagation(); goView(); });
 
             resultsList.appendChild(li);
-            });
+        });
 
-        } catch (err) {
-            console.error("Search error:", err);
-            resultsList.innerHTML = "<li>Error fetching results.</li>";
-        }   
+    } catch (err) {
+        console.error('Search error:', err);
+        resultsList.innerHTML = `
+            <li class="col-span-full text-center py-16">
+                <p class="font-hanzi text-sf-ember text-5xl opacity-70 mb-4">斷</p>
+                <p class="font-body italic text-sf-parchment-2 text-lg mb-2">Cannot reach the archive.</p>
+                <p class="text-sf-parchment-2/60 text-sm mb-4">Make sure the server is running.</p>
+                <button type="button" onclick="submitFilters()" class="px-5 py-2 font-heading text-[0.7rem] tracking-[0.22em] uppercase text-sf-gold-bright border border-sf-gold-dark hover:border-sf-gold hover:bg-sf-gold-bright/10 transition">Retry</button>
+            </li>`;
     }
-</script>
+}
 
-<script>
+function escapeHtml(value) {
+    if (value === null || value === undefined) return '';
+    return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+/* ==========================================================================
+   Nav
+========================================================================== */
 function updateNavButton() {
-    const button = document.getElementById("navAccountButton");
-    const username = sessionStorage.getItem("username");
-
+    const button = document.getElementById('navAccountButton');
+    const username = sessionStorage.getItem('username');
     if (!button) return;
-
-    if (username) {
-        button.textContent = "My Account";
-    } else {
-        button.textContent = "Login";
-    }
+    button.textContent = username ? 'My Account' : 'Login';
 }
 
 function handleNavAccount() {
-    const username = sessionStorage.getItem("username");
-
-    if (username) {
-        window.location.href = "Account.html";
-    } else {
-        window.location.href = "Login.html";
-    }
+    const username = sessionStorage.getItem('username');
+    window.location.href = username ? 'Account.html' : 'Login.html';
 }
 
-// Run when page loads
-window.addEventListener("DOMContentLoaded", updateNavButton);
+window.addEventListener('DOMContentLoaded', () => {
+    updateNavButton();
+    renderFactionGrid();
+    setFilterPanelOpen(false);  // filters closed by default
+
+    ['keywordSearch','Cost','Pow','Bod','Res','Subtype'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateActiveFilterBadge);
+        if (el) el.addEventListener('change', updateActiveFilterBadge);
+    });
+
+    // Auto-load all cards on page open so users see content immediately
+    setTimeout(() => submitFilters(), 50);
+});
 </script>
 
 </body>
